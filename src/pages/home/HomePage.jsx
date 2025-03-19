@@ -10,7 +10,7 @@ const HomePage = () => {
 			<WelcomeSection />
 			<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 				<BalanceCard />
-				<QuickActions />
+				{/* <QuickActions /> */}
 			</div>
 			<TransactionHistory limit={4} />
 			<SpendingAnalytics />

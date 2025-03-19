@@ -1,12 +1,12 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Layout from "./components/layout/Layout";
-import HomePage from "./pages/home/HomePage";
+// import Layout from "./components/layout/Layout";
+// import HomePage from "./pages/home/HomePage";
 // import WalletPage from "./pages/Wallet/WalletPage";
 // import TransactionsPage from "./pages/Transactions/TransactionsPage";
 // import ProfilePage from "./pages/Profile/ProfilePage";
-// import LoginPage from "./pages/Login/LoginPage";
+import LoginPage from "./pages/Login/LoginPage";
 // import RegisterPage from "./pages/Register/RegisterPage";
-// import { AuthProvider } from "./context/AuthContext";
+import { AuthProvider } from "./context/AuthContext";
 // import ProtectedRoute from "./components/common/ProtectedRoute";
 
 function App() {
@@ -15,7 +15,7 @@ function App() {
 			<Router>
 				<Routes>
 					<Route path="/login" element={<LoginPage />} />
-					<Route path="/register" element={<RegisterPage />} />
+					{/* <Route path="/register" element={<RegisterPage />} />
 					<Route path="/" element={<Layout />}>
 						<Route
 							index
@@ -49,8 +49,9 @@ function App() {
 								</ProtectedRoute>
 							}
 						/>
-					</Route>
+					</Route> */}
 				</Routes>
+				<h1>hellou</h1>
 			</Router>
 		</AuthProvider>
 	);

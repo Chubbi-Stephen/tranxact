@@ -1,59 +1,97 @@
+import { Bar, Doughnut } from "react-chartjs-2";
+import {
+	Chart as ChartJS,
+	CategoryScale,
+	LinearScale,
+	BarElement,
+	ArcElement,
+	Tooltip,
+	Legend,
+} from "chart.js";
+
+// Register Chart.js components
+ChartJS.register(
+	CategoryScale,
+	LinearScale,
+	BarElement,
+	ArcElement,
+	Tooltip,
+	Legend
+);
+
 const SpendingAnalytics = () => {
 	const categories = [
-		{ name: "Housing", percentage: 35, color: "bg-purple-700" },
-		{ name: "Food", percentage: 25, color: "bg-green-500" },
-		{ name: "Entertainment", percentage: 20, color: "bg-blue-500" },
-		{ name: "Others", percentage: 20, color: "bg-red-500" },
+		{ name: "Housing", percentage: 35, color: "#6B46C1" }, // Purple
+		{ name: "Food", percentage: 25, color: "#48BB78" }, // Green
+		{ name: "Entertainment", percentage: 20, color: "#4299E1" }, // Blue
+		{ name: "Others", percentage: 20, color: "#F56565" }, // Red
 	];
 
 	const monthlyData = [
-		{ month: "Jan", spending: 800 },
-		{ month: "Feb", spending: 900 },
-		{ month: "Mar", spending: 1000 },
-		{ month: "Apr", spending: 1200 },
-		{ month: "May", spending: 1100 },
-		{ month: "Jun", spending: 950 },
+		{ month: "Jan", spending: 80 },
+		{ month: "Feb", spending: 90 },
+		{ month: "Mar", spending: 100 },
+		{ month: "Apr", spending: 120 },
+		{ month: "May", spending: 110 },
+		{ month: "Jun", spending: 95 },
 	];
 
-	// Calculate max spending for chart scaling
-	const maxSpending = Math.max(...monthlyData.map((d) => d.spending));
+	// Bar chart data
+	const barChartData = {
+		labels: monthlyData.map((data) => data.month),
+		datasets: [
+			{
+				label: "Monthly Spending",
+				data: monthlyData.map((data) => data.spending),
+				backgroundColor: "#6B46C1", // Purple
+				borderRadius: 4,
+			},
+		],
+	};
+
+	// Doughnut chart data
+	const doughnutChartData = {
+		labels: categories.map((category) => category.name),
+		datasets: [
+			{
+				data: categories.map((category) => category.percentage),
+				backgroundColor: categories.map((category) => category.color),
+				borderWidth: 1,
+			},
+		],
+	};
 
 	return (
 		<div className="bg-white p-6 rounded-lg border border-slate-200">
 			<h3 className="text-slate-500 font-medium">Spending Analytics</h3>
 			<div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
-				<div className="flex flex-col items-center">
-					<div className="relative w-48 h-48">
-						{/* This is a simplified representation of the pie chart */}
-						<div className="absolute inset-0 rounded-full border border-slate-200"></div>
-						{/* In a real app, you would use a chart library like Chart.js or Recharts */}
-					</div>
-					<div className="mt-6 space-y-2 w-full">
-						{categories.map((category, index) => (
-							<div key={index} className="flex items-center">
-								<div className={`w-4 h-4 ${category.color} mr-2`}></div>
-								<span className="text-sm text-slate-900">
-									{category.name} ({category.percentage}%)
-								</span>
-							</div>
-						))}
+				{/* Doughnut Chart */}
+				<div className="flex flex-col items-center w-full">
+					<h4 className="text-slate-700 font-medium mb-4">
+						Category Breakdown
+					</h4>
+					<div className="w-full max-w-xs aspect-square">
+						<Doughnut
+							data={doughnutChartData}
+							options={{
+								responsive: true,
+								maintainAspectRatio: true,
+							}}
+						/>
 					</div>
 				</div>
-				<div>
-					<div className="h-48 flex items-end space-x-2">
-						{monthlyData.map((data, index) => (
-							<div key={index} className="flex-1 flex flex-col items-center">
-								<div className="w-full bg-slate-100 rounded-t-sm">
-									<div
-										className="bg-purple-700 rounded-t-sm"
-										style={{
-											height: `${(data.spending / maxSpending) * 100}%`,
-										}}
-									></div>
-								</div>
-								<p className="text-xs text-slate-500 mt-2">{data.month}</p>
-							</div>
-						))}
+
+				{/* Bar Chart */}
+				<div className="w-full">
+					<h4 className="text-slate-700 font-medium mb-4">Monthly Spending</h4>
+					<div className="w-full aspect-video">
+						<Bar
+							data={barChartData}
+							options={{
+								responsive: true,
+								maintainAspectRatio: false,
+							}}
+						/>
 					</div>
 				</div>
 			</div>

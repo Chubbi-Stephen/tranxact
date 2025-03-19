@@ -1,6 +1,6 @@
 import WelcomeSection from "../../components/features/Dashboard/WelcomeSection";
 import BalanceCard from "../../components/features/Dashboard/BalanceCard";
-import QuickActions from "../../components/features/Dashboard/QuickActions";
+// import QuickActions from "../../components/features/Dashboard/QuickActions";
 import TransactionHistory from "../../components/features/Transactions/TransactionHistory";
 import SpendingAnalytics from "../../components/features/Dashboard/SpendingAnalytics";
 

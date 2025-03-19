@@ -8,7 +8,7 @@ const Header = () => {
 			<div className="container mx-auto flex justify-between items-center">
 				<div className="flex items-center">
 					<div className="bg-purple-700 h-10 w-10 rounded-full mr-3"></div>
-					<h1 className="font-bold text-xl">OpayClone</h1>
+					<h1 className="font-bold text-xl">Transact</h1>
 				</div>
 				<div className="flex items-center">
 					<div className="bg-slate-700 px-4 py-1 rounded-full flex items-center mr-4">

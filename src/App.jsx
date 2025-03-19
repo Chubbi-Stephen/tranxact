@@ -3,7 +3,7 @@ import Layout from "./components/layout/Layout";
 import HomePage from "./pages/home/HomePage";
 // import WalletPage from "./pages/Wallet/WalletPage";
 // import TransactionsPage from "./pages/Transactions/TransactionsPage";
-// import ProfilePage from "./pages/Profile/ProfilePage";
+import ProfilePage from "./pages/Profile/ProfilePage";
 import LoginPage from "./pages/Login/LoginPage";
 import RegisterPage from "./pages/Register/RegisterPage";
 import { AuthProvider } from "./context/AuthContext";
@@ -41,14 +41,14 @@ function App() {
 								</ProtectedRoute>
 							}
 						/> */}
-						{/* <Route
+						<Route
 							path="profile"
 							element={
 								<ProtectedRoute>
 									<ProfilePage />
 								</ProtectedRoute>
 							}
-						/> */}
+						/>
 					</Route>
 				</Routes>
 				{/* <h1>hellou</h1> */}

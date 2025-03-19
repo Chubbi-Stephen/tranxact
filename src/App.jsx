@@ -1,8 +1,8 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Layout from "./components/layout/Layout";
 import HomePage from "./pages/home/HomePage";
-// import WalletPage from "./pages/Wallet/WalletPage";
-// import TransactionsPage from "./pages/Transactions/TransactionsPage";
+import WalletPage from "./pages/Wallet/WalletPage";
+import TransactionsPage from "./pages/Transactions/TransactionsPage";
 import ProfilePage from "./pages/Profile/ProfilePage";
 import LoginPage from "./pages/Login/LoginPage";
 import RegisterPage from "./pages/Register/RegisterPage";
@@ -25,22 +25,22 @@ function App() {
 								</ProtectedRoute>
 							}
 						/>
-						{/* <Route
+						<Route
 							path="wallet"
 							element={
 								<ProtectedRoute>
 									<WalletPage />
 								</ProtectedRoute>
 							}
-						/> */}
-						{/* <Route
+						/>
+						<Route
 							path="transactions"
 							element={
 								<ProtectedRoute>
 									<TransactionsPage />
 								</ProtectedRoute>
 							}
-						/> */}
+						/>
 						<Route
 							path="profile"
 							element={
@@ -51,7 +51,6 @@ function App() {
 						/>
 					</Route>
 				</Routes>
-				{/* <h1>hellou</h1> */}
 			</Router>
 		</AuthProvider>
 	);

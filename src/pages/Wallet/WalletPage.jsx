@@ -15,7 +15,7 @@ const WalletPage = () => {
 				last4: "4242",
 				expiryDate: "09/28",
 				balance: 8735.42,
-				color: "bg-purple-700",
+				color: "bg-[#013653]",
 			},
 			{
 				id: 2,
@@ -23,7 +23,7 @@ const WalletPage = () => {
 				last4: "5678",
 				expiryDate: "12/26",
 				balance: 3745.13,
-				color: "bg-blue-600",
+				color: "bg-[#E4570A]",
 			},
 		],
 		accounts: [
@@ -61,10 +61,10 @@ const WalletPage = () => {
 					})}
 				</p>
 				<div className="flex gap-4 mt-6">
-					<button className="bg-purple-700 text-white px-6 py-2 rounded-full text-sm">
+					<button className="bg-[#E4570A] text-white px-6 py-2 rounded-full text-sm">
 						Add Money
 					</button>
-					<button className="border border-purple-700 text-purple-700 px-6 py-2 rounded-full text-sm">
+					<button className="border border-[#E4570A] text-[#E4570A] px-6 py-2 rounded-full text-sm">
 						Send Money
 					</button>
 				</div>
@@ -75,7 +75,7 @@ const WalletPage = () => {
 					<button
 						className={`flex-1 py-4 text-center font-medium ${
 							activeTab === "cards"
-								? "text-purple-700 border-b-2 border-purple-700"
+								? "text-[#E4570A] border-b-2 border-[#E4570A]"
 								: "text-slate-500"
 						}`}
 						onClick={() => setActiveTab("cards")}
@@ -85,7 +85,7 @@ const WalletPage = () => {
 					<button
 						className={`flex-1 py-4 text-center font-medium ${
 							activeTab === "accounts"
-								? "text-purple-700 border-b-2 border-purple-700"
+								? "text-[#E4570A] border-b-2 border-[#E4570A]"
 								: "text-slate-500"
 						}`}
 						onClick={() => setActiveTab("accounts")}

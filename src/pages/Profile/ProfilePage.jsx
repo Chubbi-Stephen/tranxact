@@ -45,9 +45,9 @@ const ProfilePage = () => {
 
 	return (
 		<div className="space-y-6">
-			<div className="bg-slate-100 p-6 rounded-lg">
+			<div className="bg-[#F5F5F5] p-6 rounded-lg">
 				<div className="flex items-center">
-					<div className="bg-slate-700 h-16 w-16 rounded-full flex items-center justify-center text-white text-xl font-bold mr-4">
+					<div className="bg-[#013653] h-16 w-16 rounded-full flex items-center justify-center text-white text-xl font-bold mr-4">
 						{profile.firstName[0]}
 						{profile.lastName[0]}
 					</div>
@@ -60,12 +60,12 @@ const ProfilePage = () => {
 				</div>
 			</div>
 
-			<div className="bg-white rounded-lg border border-slate-200">
+			<div className="bg-[#E5E3DC] rounded-lg border border-slate-200">
 				<div className="flex border-b border-slate-200 overflow-x-auto">
 					<button
 						className={`py-4 px-6 whitespace-nowrap font-medium ${
 							activeTab === "personal"
-								? "text-purple-700 border-b-2 border-purple-700"
+								? "text-[#E4570A] border-b-2 border-[#E4570A]"
 								: "text-slate-500"
 						}`}
 						onClick={() => setActiveTab("personal")}
@@ -75,7 +75,7 @@ const ProfilePage = () => {
 					<button
 						className={`py-4 px-6 whitespace-nowrap font-medium ${
 							activeTab === "notifications"
-								? "text-purple-700 border-b-2 border-purple-700"
+								? "text-[#E4570A] border-b-2 border-[#E4570A]"
 								: "text-slate-500"
 						}`}
 						onClick={() => setActiveTab("notifications")}
@@ -85,7 +85,7 @@ const ProfilePage = () => {
 					<button
 						className={`py-4 px-6 whitespace-nowrap font-medium ${
 							activeTab === "security"
-								? "text-purple-700 border-b-2 border-purple-700"
+								? "text-[#E4570A] border-b-2 border-[#E4570A]"
 								: "text-slate-500"
 						}`}
 						onClick={() => setActiveTab("security")}
@@ -95,7 +95,7 @@ const ProfilePage = () => {
 					<button
 						className={`py-4 px-6 whitespace-nowrap font-medium ${
 							activeTab === "payment"
-								? "text-purple-700 border-b-2 border-purple-700"
+								? "text-[#E4570A] border-b-2 border-[#E4570A]"
 								: "text-slate-500"
 						}`}
 						onClick={() => setActiveTab("payment")}
@@ -170,7 +170,7 @@ const ProfilePage = () => {
 								></textarea>
 							</div>
 							<div>
-								<button className="bg-purple-700 text-white px-6 py-2 rounded-full">
+								<button className="bg-[#E4570A] text-white px-6 py-2 rounded-full">
 									Edit Profile
 								</button>
 							</div>
@@ -192,7 +192,7 @@ const ProfilePage = () => {
 										checked={profile.notifications.email}
 										className="sr-only peer"
 									/>
-									<div className="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-700"></div>
+									<div className="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#E4570A]"></div>
 								</label>
 							</div>
 							<div className="flex items-center justify-between p-4 border border-slate-200 rounded">
@@ -208,7 +208,7 @@ const ProfilePage = () => {
 										checked={profile.notifications.push}
 										className="sr-only peer"
 									/>
-									<div className="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-700"></div>
+									<div className="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#E4570A]"></div>
 								</label>
 							</div>
 							<div className="flex items-center justify-between p-4 border border-slate-200 rounded">
@@ -228,7 +228,7 @@ const ProfilePage = () => {
 								</label>
 							</div>
 							<div>
-								<button className="bg-purple-700 text-white px-6 py-2 rounded-full">
+								<button className="bg-[#E4570A] text-white px-6 py-2 rounded-full">
 									Save Preferences
 								</button>
 							</div>
@@ -250,7 +250,7 @@ const ProfilePage = () => {
 										checked={profile.security.twoFactor}
 										className="sr-only peer"
 									/>
-									<div className="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-700"></div>
+									<div className="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#E4570A]"></div>
 								</label>
 							</div>
 							<div>
@@ -258,7 +258,7 @@ const ProfilePage = () => {
 								<p className="text-sm text-slate-500 mb-4">
 									Last changed on {profile.security.lastPasswordChange}
 								</p>
-								<button className="border border-purple-700 text-purple-700 px-6 py-2 rounded-full">
+								<button className="border border-[#E4570A] text-[#E4570A] px-6 py-2 rounded-full">
 									Change Password
 								</button>
 							</div>
@@ -281,7 +281,9 @@ const ProfilePage = () => {
 													Current
 												</span>
 											) : (
-												<button className="text-red-500 text-sm">Revoke</button>
+												<button className="text-[#E4570A] text-sm">
+													Revoke
+												</button>
 											)}
 										</div>
 									))}
@@ -295,7 +297,7 @@ const ProfilePage = () => {
 							<p className="text-slate-500">
 								You haven't added any payment methods yet.
 							</p>
-							<button className="bg-purple-700 text-white px-6 py-2 rounded-full">
+							<button className="bg-[#E4570A] text-white px-6 py-2 rounded-full">
 								Add Payment Method
 							</button>
 						</div>
@@ -304,7 +306,7 @@ const ProfilePage = () => {
 			</div>
 
 			<div className="flex justify-center p-4">
-				<button onClick={handleLogout} className="text-red-500 font-medium">
+				<button onClick={handleLogout} className="text-[#E4570A] font-medium">
 					Logout
 				</button>
 			</div>

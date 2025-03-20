@@ -102,7 +102,7 @@ const TransactionsPage = () => {
 
 	return (
 		<div className="space-y-6">
-			<div className="bg-slate-100 p-6 rounded-lg">
+			<div className="bg-[#E5E3DC] p-6 rounded-lg">
 				<h2 className="text-2xl font-bold text-slate-900">Transactions</h2>
 				<p className="text-slate-600 mt-2">
 					View and manage your transaction history
@@ -140,7 +140,7 @@ const TransactionsPage = () => {
 					</div>
 				</div>
 
-				<div className="p-6">
+				<div className="p-6 bg-[#E5E3DC]">
 					<div className="flex gap-4 mb-6 overflow-x-auto">
 						<button
 							className={`px-6 py-2 rounded-full text-sm whitespace-nowrap ${

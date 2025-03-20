@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom";
 
 const BottomNavigation = () => {
 	return (
-		<nav className="fixed bottom-0 w-full bg-[#1E293B] border-t border-slate-200">
+		<nav className="fixed bottom-0 w-full bg-[#013653] border-t border-slate-200">
 			<div className="container mx-auto flex justify-around items-center py-3">
 				<NavLink
 					to="/"

@@ -46,12 +46,12 @@ const WalletPage = () => {
 
 	return (
 		<div className="space-y-6">
-			<div className="bg-slate-100 p-6 rounded-lg">
+			<div className="bg-[#F5F5F5] p-6 rounded-lg">
 				<h2 className="text-2xl font-bold text-slate-900">Your Wallet</h2>
 				<p className="text-slate-600 mt-2">Manage your cards and accounts</p>
 			</div>
 
-			<div className="bg-white p-6 rounded-lg border border-slate-200">
+			<div className="bg-[#E5E3DC] p-6 rounded-lg border border-slate-200">
 				<h3 className="text-slate-500 font-medium">Total Balance</h3>
 				<p className="text-3xl font-bold text-slate-900 mt-4">
 					$
@@ -70,7 +70,7 @@ const WalletPage = () => {
 				</div>
 			</div>
 
-			<div className="bg-white rounded-lg border border-slate-200">
+			<div className="bg-[#F5F5F5] rounded-lg border border-slate-200">
 				<div className="flex border-b border-slate-200">
 					<button
 						className={`flex-1 py-4 text-center font-medium ${

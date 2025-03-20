@@ -4,7 +4,7 @@ const Header = () => {
 	const { user } = useAuth();
 
 	return (
-		<header className="bg-[#1E293B] m-3 mt-2 rounded-2xl text-white p-4">
+		<header className="bg-[#013653] m-3 mt-2 rounded-2xl text-white p-4">
 			<div className="container mx-auto flex justify-between items-center">
 				<div className="flex items-center">
 					<div className="bg-[#E4570A] h-10 w-10 flex justify-center items-center rounded-full mr-3">

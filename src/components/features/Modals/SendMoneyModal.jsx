@@ -41,7 +41,7 @@ const SendMoneyModal = ({ onClose }) => {
 					<input
 						id="recipient"
 						type="text"
-						className="w-full p-3 border border-slate-300 rounded"
+						className="w-full p-3 border border-[#E4570A] rounded"
 						placeholder="Email or Phone Number"
 						value={recipient}
 						onChange={(e) => setRecipient(e.target.value)}
@@ -55,9 +55,9 @@ const SendMoneyModal = ({ onClose }) => {
 					<input
 						id="amount"
 						type="number"
-						step="0.01"
-						min="0.01"
-						className="w-full p-3 border border-slate-300 rounded"
+						step="0.5"
+						min="0.5"
+						className="w-full p-3 border border-[#E4570A] rounded"
 						placeholder="0.00"
 						value={amount}
 						onChange={(e) => setAmount(e.target.value)}
@@ -70,7 +70,7 @@ const SendMoneyModal = ({ onClose }) => {
 					</label>
 					<textarea
 						id="note"
-						className="w-full p-3 border border-slate-300 rounded"
+						className="w-full p-3 border border-[#E4570A] rounded"
 						placeholder="What's this for?"
 						value={note}
 						onChange={(e) => setNote(e.target.value)}
@@ -88,7 +88,7 @@ const SendMoneyModal = ({ onClose }) => {
 					</button>
 					<button
 						type="submit"
-						className="px-6 py-2 bg-purple-700 text-white rounded-full"
+						className="px-6 py-2 bg-[#E4570A] text-white rounded-full"
 						disabled={loading}
 					>
 						{loading ? "Sending..." : "Send Money"}

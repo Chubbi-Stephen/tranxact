@@ -92,9 +92,6 @@ const WithdrawModal = ({ onClose }) => {
 
 				{withdrawMethod === "bank" && (
 					<div className="mb-6">
-						{/* <label className="block text-slate-700 mb-2" htmlFor="bankAccount">
-							Bank Account
-						</label> */}
 						{withdrawMethod === "bank" && (
 							<div className="mb-6">
 								<label

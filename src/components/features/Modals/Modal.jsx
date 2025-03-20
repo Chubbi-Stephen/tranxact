@@ -28,7 +28,7 @@ const Modal = ({ title, onClose, children }) => {
 		>
 			<div className="bg-white rounded-lg shadow-lg w-full max-w-md">
 				<div className="flex justify-between items-center p-4 border-b border-slate-200">
-					<h3 className="text-lg font-bold text-slate-900">{title}</h3>
+					<h3 className="text-xl font-bold text-slate-900">{title}</h3>
 					<button
 						onClick={onClose}
 						className="text-slate-500 hover:text-slate-700"

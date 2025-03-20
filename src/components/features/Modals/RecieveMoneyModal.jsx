@@ -28,7 +28,7 @@ const ReceiveMoneyModal = ({ onClose }) => {
 				<button
 					className={`pb-2 px-4 ${
 						activeTab === "qr"
-							? "border-b-2 border-purple-700 text-purple-700"
+							? "border-b-2 border-[#E4570A] text-[#E4570A]"
 							: "text-slate-500"
 					}`}
 					onClick={() => setActiveTab("qr")}
@@ -38,7 +38,7 @@ const ReceiveMoneyModal = ({ onClose }) => {
 				<button
 					className={`pb-2 px-4 ${
 						activeTab === "link"
-							? "border-b-2 border-purple-700 text-purple-700"
+							? "border-b-2 border-[#E4570A] text-[#E4570A]"
 							: "text-slate-500"
 					}`}
 					onClick={() => setActiveTab("link")}
@@ -49,7 +49,7 @@ const ReceiveMoneyModal = ({ onClose }) => {
 
 			{activeTab === "qr" && (
 				<div className="flex flex-col items-center">
-					<div className="bg-slate-100 w-64 h-64 flex items-center justify-center mb-4">
+					<div className="bg-[#E5E3DC] w-64 h-64 flex items-center justify-center mb-4">
 						{/* This would be a real QR code in a production app */}
 						<div className="text-center">
 							<p className="text-slate-500">QR Code</p>
@@ -78,7 +78,7 @@ const ReceiveMoneyModal = ({ onClose }) => {
 						/>
 						<button
 							onClick={copyToClipboard}
-							className="bg-purple-700 text-white px-4 rounded-r"
+							className="bg-[#E4570A] text-white px-4 rounded-r"
 						>
 							{copySuccess || "Copy"}
 						</button>
@@ -86,13 +86,28 @@ const ReceiveMoneyModal = ({ onClose }) => {
 					<div className="mt-6">
 						<p className="text-slate-500 mb-2">Share via:</p>
 						<div className="flex space-x-4">
-							<button className="bg-blue-500 text-white p-2 rounded">
+							<button
+								className="bg-blue-500 text-white p-2 px-4 rounded-xl"
+								style={{
+									background: "linear-gradient(to right, #464f5E, #823C16)",
+								}}
+							>
 								WhatsApp
 							</button>
-							<button className="bg-blue-600 text-white p-2 rounded">
+							<button
+								className="bg-blue-600 text-white p-2 px-4 rounded-xl"
+								style={{
+									background: "linear-gradient(to right, #464f5E, #823C16)",
+								}}
+							>
 								Facebook
 							</button>
-							<button className="bg-sky-500 text-white p-2 rounded">
+							<button
+								className="bg-sky-500 text-white p-2 px-4 rounded-xl"
+								style={{
+									background: "linear-gradient(to right, #464f5E, #823C16)",
+								}}
+							>
 								Twitter
 							</button>
 						</div>

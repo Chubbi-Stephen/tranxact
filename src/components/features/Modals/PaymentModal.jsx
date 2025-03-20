@@ -28,7 +28,7 @@ const PaymentModal = ({ onClose }) => {
 				<button
 					className={`pb-2 px-4 ${
 						activeTab === "bills"
-							? "border-b-2 border-purple-700 text-purple-700"
+							? "border-b-2 border-[#E4570A] text-[#E4570A]"
 							: "text-slate-500"
 					}`}
 					onClick={() => setActiveTab("bills")}
@@ -38,7 +38,7 @@ const PaymentModal = ({ onClose }) => {
 				<button
 					className={`pb-2 px-4 ${
 						activeTab === "merchants"
-							? "border-b-2 border-purple-700 text-purple-700"
+							? "border-b-2 border-[#E4570A] text-[#E4570A]"
 							: "text-slate-500"
 					}`}
 					onClick={() => setActiveTab("merchants")}
@@ -54,7 +54,7 @@ const PaymentModal = ({ onClose }) => {
 						{billCategories.map((category) => (
 							<button
 								key={category.id}
-								className="flex flex-col items-center bg-slate-50 p-4 rounded border border-slate-200 hover:bg-slate-100"
+								className="flex flex-col items-center bg-[#E5E3DC] p-4 rounded border border-slate-200 hover:bg-slate-100"
 								onClick={() => console.log(`Selected ${category.name}`)}
 							>
 								<span className="text-2xl mb-2">{category.icon}</span>
@@ -72,7 +72,7 @@ const PaymentModal = ({ onClose }) => {
 										Last paid: Mar 10, 2025
 									</p>
 								</div>
-								<button className="bg-purple-700 text-white px-4 py-1 rounded-full text-sm">
+								<button className="bg-[#E4570A] text-white px-4 py-1 rounded-full text-sm">
 									Pay Now
 								</button>
 							</div>
@@ -83,7 +83,7 @@ const PaymentModal = ({ onClose }) => {
 										Last paid: Feb 15, 2025
 									</p>
 								</div>
-								<button className="bg-purple-700 text-white px-4 py-1 rounded-full text-sm">
+								<button className="bg-[#E4570A] text-white px-4 py-1 rounded-full text-sm">
 									Pay Now
 								</button>
 							</div>
@@ -99,7 +99,7 @@ const PaymentModal = ({ onClose }) => {
 						{merchantCategories.map((category) => (
 							<button
 								key={category.id}
-								className="flex flex-col items-center bg-slate-50 p-4 rounded border border-slate-200 hover:bg-slate-100"
+								className="flex flex-col items-center bg-[#E5E3DC] p-4 rounded border border-slate-200 hover:bg-slate-100"
 								onClick={() => console.log(`Selected ${category.name}`)}
 							>
 								<span className="text-2xl mb-2">{category.icon}</span>
@@ -117,7 +117,7 @@ const PaymentModal = ({ onClose }) => {
 										Last paid: Mar 14, 2025
 									</p>
 								</div>
-								<button className="bg-purple-700 text-white px-4 py-1 rounded-full text-sm">
+								<button className="bg-[#E4570A] text-white px-4 py-1 rounded-full text-sm">
 									Pay Now
 								</button>
 							</div>
@@ -128,7 +128,7 @@ const PaymentModal = ({ onClose }) => {
 										Last paid: Mar 19, 2025
 									</p>
 								</div>
-								<button className="bg-purple-700 text-white px-4 py-1 rounded-full text-sm">
+								<button className="bg-[#E4570A] text-white px-4 py-1 rounded-full text-sm">
 									Pay Now
 								</button>
 							</div>

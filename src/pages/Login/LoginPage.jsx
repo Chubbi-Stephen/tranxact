@@ -29,7 +29,9 @@ const LoginPage = () => {
 		<div className="min-h-screen flex items-center justify-center bg-slate-50 p-4">
 			<div className="bg-[#E5E3DC] p-8 rounded-lg border border-slate-200 shadow-md w-full max-w-md">
 				<div className="flex justify-center mb-8">
-					<div className="bg-[#E4570A] h-16 w-16 rounded-full"></div>
+					<div className="bg-[#E4570A] h-16 w-16 rounded-full flex justify-center items-center">
+						<span className="text-white text-3xl">T</span>
+					</div>
 				</div>
 				<h1 className="text-2xl font-bold text-center mb-6">
 					Login to Transact

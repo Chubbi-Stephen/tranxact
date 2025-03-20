@@ -31,7 +31,7 @@ const MoreActionsModal = ({ onClose }) => {
 				{actions.map((action, index) => (
 					<button
 						key={index}
-						className="flex flex-col items-center p-4 rounded border border-slate-200 hover:bg-slate-50"
+						className="flex flex-col items-center p-4 rounded border border-slate-200 hover:bg-[#E5E3DC]"
 						onClick={() => {
 							action.action();
 							onClose();

@@ -48,7 +48,7 @@ const AddMoneyModal = ({ onClose }) => {
 						type="number"
 						step="0.01"
 						min="0.01"
-						className="w-full p-3 border border-slate-300 rounded text-2xl"
+						className="w-full p-3 border border-[#E4570A] rounded text-2xl"
 						placeholder="0.00"
 						value={amount}
 						onChange={(e) => setAmount(e.target.value)}
@@ -64,7 +64,7 @@ const AddMoneyModal = ({ onClose }) => {
 								key={method.id}
 								className={`flex items-center p-3 border rounded cursor-pointer ${
 									paymentMethod === method.id
-										? "border-purple-700 bg-purple-50"
+										? "border-[#E4570A] bg-[#E5E3DC]"
 										: "border-slate-200"
 								}`}
 							>
@@ -74,7 +74,7 @@ const AddMoneyModal = ({ onClose }) => {
 									value={method.id}
 									checked={paymentMethod === method.id}
 									onChange={() => setPaymentMethod(method.id)}
-									className="mr-2"
+									className="mr-2 accent-[#1E293B]"
 									required
 								/>
 								<span className="mr-2">{method.icon}</span>
@@ -95,7 +95,7 @@ const AddMoneyModal = ({ onClose }) => {
 					</button>
 					<button
 						type="submit"
-						className="px-6 py-2 bg-purple-700 text-white rounded-full"
+						className="px-6 py-2 bg-[#E4570A] text-white rounded-full"
 						disabled={loading || !amount || !paymentMethod}
 					>
 						{loading ? "Processing..." : "Add Money"}

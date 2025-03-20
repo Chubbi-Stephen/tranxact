@@ -53,7 +53,7 @@ const TransactionHistory = ({ limit }) => {
 		: filteredTransactions;
 
 	return (
-		<div className="bg-white p-6 rounded-lg border border-slate-200">
+		<div className="bg-[#E5E3DC] p-6 rounded-lg border border-slate-200">
 			<h3 className="text-slate-500 font-medium">Recent Transactions</h3>
 			<div className="flex gap-4 mt-4">
 				<button

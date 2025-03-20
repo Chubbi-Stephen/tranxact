@@ -42,7 +42,7 @@ const QuickActions = () => {
 
 	return (
 		<>
-			<div className="bg-white p-6 rounded-lg border border-slate-200">
+			<div className="bg-[#F5F5F5] p-6 rounded-lg border border-slate-200">
 				<h3 className="text-slate-500 font-medium">Quick Actions</h3>
 				<div className="grid grid-cols-4 gap-4 mt-4">
 					{actions.map((action, index) => (

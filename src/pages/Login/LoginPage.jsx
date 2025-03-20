@@ -27,9 +27,9 @@ const LoginPage = () => {
 
 	return (
 		<div className="min-h-screen flex items-center justify-center bg-slate-50 p-4">
-			<div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+			<div className="bg-[#E5E3DC] p-8 rounded-lg border border-slate-200 shadow-md w-full max-w-md">
 				<div className="flex justify-center mb-8">
-					<div className="bg-purple-700 h-16 w-16 rounded-full"></div>
+					<div className="bg-[#E4570A] h-16 w-16 rounded-full"></div>
 				</div>
 				<h1 className="text-2xl font-bold text-center mb-6">
 					Login to Transact
@@ -47,7 +47,7 @@ const LoginPage = () => {
 						<input
 							id="email"
 							type="email"
-							className="w-full p-3 border border-slate-300 rounded"
+							className="w-full p-3 border border-[#E4570A] rounded"
 							value={email}
 							onChange={(e) => setEmail(e.target.value)}
 							required
@@ -60,7 +60,7 @@ const LoginPage = () => {
 						<input
 							id="password"
 							type="password"
-							className="w-full p-3 border border-slate-300 rounded"
+							className="w-full p-3 border border-[#E4570A] rounded"
 							value={password}
 							onChange={(e) => setPassword(e.target.value)}
 							required
@@ -68,7 +68,7 @@ const LoginPage = () => {
 					</div>
 					<button
 						type="submit"
-						className="w-full bg-purple-700 text-white p-3 rounded font-medium"
+						className="w-full bg-[#E4570A] text-white p-3 rounded font-medium"
 						disabled={loading}
 					>
 						{loading ? "Logging in..." : "Login"}
@@ -77,7 +77,7 @@ const LoginPage = () => {
 
 				<p className="text-center mt-6">
 					Don't have an account?{" "}
-					<Link to="/register" className="text-purple-700">
+					<Link to="/register" className="text-[#E4570A]">
 						Register
 					</Link>
 				</p>

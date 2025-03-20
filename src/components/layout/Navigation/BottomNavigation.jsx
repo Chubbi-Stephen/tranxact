@@ -2,17 +2,17 @@ import { NavLink } from "react-router-dom";
 
 const BottomNavigation = () => {
 	return (
-		<nav className="fixed bottom-0 w-full bg-white border-t border-slate-200">
+		<nav className="fixed bottom-0 w-full bg-[#1E293B] border-t border-slate-200">
 			<div className="container mx-auto flex justify-around items-center py-3">
 				<NavLink
 					to="/"
 					className={({ isActive }) =>
 						`flex flex-col items-center ${
-							isActive ? "text-purple-700" : "text-slate-500"
+							isActive ? "text-white" : "text-[#7C94B3]"
 						}`
 					}
 				>
-					<div className="bg-slate-100 h-12 w-12 rounded-full flex items-center justify-center mb-1">
+					<div className="bg-[#E4570A] h-12 w-12 rounded-full flex items-center justify-center mb-1">
 						<span>H</span>
 					</div>
 					<span className="text-xs">Home</span>
@@ -21,11 +21,11 @@ const BottomNavigation = () => {
 					to="/wallet"
 					className={({ isActive }) =>
 						`flex flex-col items-center ${
-							isActive ? "text-purple-700" : "text-slate-500"
+							isActive ? "text-white" : "text-[#7C94B3]"
 						}`
 					}
 				>
-					<div className="bg-slate-100 h-12 w-12 rounded-full flex items-center justify-center mb-1">
+					<div className="bg-[#E4570A] h-12 w-12 rounded-full flex items-center justify-center mb-1">
 						<span>W</span>
 					</div>
 					<span className="text-xs">Wallet</span>
@@ -34,11 +34,11 @@ const BottomNavigation = () => {
 					to="/transactions"
 					className={({ isActive }) =>
 						`flex flex-col items-center ${
-							isActive ? "text-purple-700" : "text-slate-500"
+							isActive ? "text-white" : "text-[#7C94B3]"
 						}`
 					}
 				>
-					<div className="bg-slate-100 h-12 w-12 rounded-full flex items-center justify-center mb-1">
+					<div className="bg-[#E4570A] h-12 w-12 rounded-full flex items-center justify-center mb-1">
 						<span>T</span>
 					</div>
 					<span className="text-xs">Transactions</span>
@@ -47,11 +47,11 @@ const BottomNavigation = () => {
 					to="/profile"
 					className={({ isActive }) =>
 						`flex flex-col items-center ${
-							isActive ? "text-purple-700" : "text-slate-500"
+							isActive ? "text-white" : "text-[#7C94B3]"
 						}`
 					}
 				>
-					<div className="bg-slate-100 h-12 w-12 rounded-full flex items-center justify-center mb-1">
+					<div className="bg-[#E4570A] h-12 w-12 rounded-full flex items-center justify-center mb-1">
 						<span>P</span>
 					</div>
 					<span className="text-xs">Profile</span>

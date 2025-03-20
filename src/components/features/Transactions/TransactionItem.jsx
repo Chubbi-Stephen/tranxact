@@ -16,7 +16,7 @@ const TransactionItem = ({ transaction }) => {
 				<div className="text-right">
 					<p
 						className={`font-medium ${
-							amount > 0 ? "text-green-500" : "text-red-500"
+							amount > 0 ? "text-green-600" : "text-[#E4570A]"
 						}`}
 					>
 						{amount > 0 ? "+" : ""}

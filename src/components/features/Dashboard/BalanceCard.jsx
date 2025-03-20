@@ -21,7 +21,7 @@ const BalanceCard = () => {
 					</button>
 				</div>
 				<p className="text-3xl font-bold text-slate-900 mt-4">
-					{showBalance ? "$12,480.55" : "••••••••"}
+					{showBalance ? "$12,480.55" : "********"}
 				</p>
 				<p className="text-green-600 text-sm mt-1">
 					+$245.23 (1.9%) this month

@@ -22,7 +22,10 @@ const Modal = ({ title, onClose, children }) => {
 	}, []);
 
 	return (
-		<div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50">
+		<div
+			className="fixed inset-0 z-50 flex items-center justify-center p-4"
+			style={{ backgroundColor: "rgba(0, 0, 0, 0.7)" }}
+		>
 			<div className="bg-white rounded-lg shadow-lg w-full max-w-md">
 				<div className="flex justify-between items-center p-4 border-b border-slate-200">
 					<h3 className="text-lg font-bold text-slate-900">{title}</h3>

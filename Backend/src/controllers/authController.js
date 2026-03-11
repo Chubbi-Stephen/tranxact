@@ -1,6 +1,8 @@
+const AuthService = require('../services/authService');
+
 class AuthController {
-    constructor(authService) {
-        this.authService = authService;
+    constructor() {
+        this.authService = AuthService;
     }
 
     async register(req, res) {
@@ -40,4 +42,4 @@ class AuthController {
     }
 }
 
-export default AuthController;
+module.exports = new AuthController();

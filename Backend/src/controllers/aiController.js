@@ -1,14 +1,36 @@
+const AIService = require('../services/aiService');
+
 class AIController {
-    // Placeholder for future AI-driven features
-    async getPersonalFinanceAdvice(req, res) {
-        // Logic to provide AI-driven personal finance advice will go here
-        res.status(200).json({ message: "AI-driven personal finance advice will be implemented here." });
+    constructor() {
+        this.aiService = AIService;
     }
 
-    async analyzeSpendingPatterns(req, res) {
-        // Logic to analyze spending patterns using AI will go here
-        res.status(200).json({ message: "Spending pattern analysis will be implemented here." });
+    async analyzeSpending(req, res) {
+        try {
+            const analysis = await this.aiService.analyzeSpending(req.user.id, req.body);
+            res.status(200).json({ analysis });
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    }
+
+    async predictBudget(req, res) {
+        try {
+            const prediction = await this.aiService.predictBudget(req.user.id, req.body);
+            res.status(200).json({ prediction });
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    }
+
+    async recommendSavings(req, res) {
+        try {
+            const recommendations = await this.aiService.recommendSavings(req.user.id, req.body);
+            res.status(200).json({ recommendations });
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
     }
 }
 
-export default new AIController();
+module.exports = new AIController();

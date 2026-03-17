@@ -34,7 +34,7 @@ const LoginPage = () => {
 					</div>
 				</div>
 				<h1 className="text-2xl font-bold text-center mb-6">
-					Login to Transact
+					Login to Tranxact
 				</h1>
 
 				{error && (

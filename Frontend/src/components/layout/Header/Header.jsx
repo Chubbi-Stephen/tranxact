@@ -1,4 +1,5 @@
 import { useAuth } from "../../../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
 	const { user } = useAuth();
@@ -17,7 +18,10 @@ const Header = () => {
 						<div className="bg-green-600 h-2 w-2 rounded-full mr-2"></div>
 						<span className="text-xs">Active</span>
 					</div>
-					<div className="bg-slate-700 h-10 w-10 rounded-full flex items-center justify-center">
+					<div
+						className="bg-slate-700 h-10 w-10 rounded-full flex items-center justify-center"
+						role="button"
+					>
 						<span className="font-bold">{user?.initials || "JD"}</span>
 					</div>
 				</div>

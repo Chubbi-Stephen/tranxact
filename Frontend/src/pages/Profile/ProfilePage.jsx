@@ -10,9 +10,9 @@ const ProfilePage = () => {
 		firstName: user?.firstName || "John",
 		lastName: user?.lastName || "Doe",
 		email: user?.email || "john.doe@example.com",
-		phone: "+1 (555) 123-4567",
+		phone: "+234 7081 897 993",
 		dob: "1985-06-15",
-		address: "123 Main St, New York, NY 10001",
+		address: "123 Main St, Lagos, Nigeria",
 		notifications: {
 			email: true,
 			push: true,
@@ -170,7 +170,12 @@ const ProfilePage = () => {
 								></textarea>
 							</div>
 							<div>
-								<button className="bg-[#E4570A] text-white px-6 py-2 rounded-full">
+								<button
+									className="bg-[#E4570A] text-white px-6 py-2 rounded-full"
+									onClick={() =>
+										alert("Edit profile functionality coming soon!")
+									}
+								>
 									Edit Profile
 								</button>
 							</div>

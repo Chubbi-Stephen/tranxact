@@ -129,7 +129,10 @@ const WalletPage = () => {
 									</div>
 								</div>
 							))}
-							<button className="w-full border border-dashed border-slate-300 p-6 rounded-lg text-slate-500 flex items-center justify-center">
+							<button
+								className="w-full border border-dashed border-slate-300 p-6 rounded-lg text-slate-500 flex items-center justify-center"
+								onClick={() => alert("Add card functionality coming soon!")}
+							>
 								<span className="mr-2">+</span> Add New Card
 							</button>
 						</div>
@@ -159,7 +162,10 @@ const WalletPage = () => {
 									</div>
 								</div>
 							))}
-							<button className="w-full border border-dashed border-slate-300 p-4 rounded-lg text-slate-500 flex items-center justify-center">
+							<button
+								className="w-full border border-dashed border-slate-300 p-4 rounded-lg text-slate-500 flex items-center justify-center"
+								onClick={() => alert("Add account functionality coming soon!")}
+							>
 								<span className="mr-2">+</span> Add New Account
 							</button>
 						</div>

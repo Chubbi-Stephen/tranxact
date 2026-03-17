@@ -11,7 +11,7 @@ const TransactionsPage = () => {
 		{
 			id: 1,
 			name: "Coffee Shop",
-			date: "Mar 19, 2025",
+			date: "Mar 19, 2026",
 			time: "10:23 AM",
 			amount: -4.5,
 			status: "Completed",
@@ -21,7 +21,7 @@ const TransactionsPage = () => {
 		{
 			id: 2,
 			name: "Paycheck",
-			date: "Mar 15, 2025",
+			date: "Mar 15, 2026",
 			time: "9:00 AM",
 			amount: 1250.0,
 			status: "Completed",
@@ -31,7 +31,7 @@ const TransactionsPage = () => {
 		{
 			id: 3,
 			name: "Grocery Store",
-			date: "Mar 14, 2025",
+			date: "Mar 14, 2026",
 			time: "4:17 PM",
 			amount: -87.32,
 			status: "Completed",
@@ -41,7 +41,7 @@ const TransactionsPage = () => {
 		{
 			id: 4,
 			name: "Electricity Bill",
-			date: "Mar 10, 2025",
+			date: "Mar 10, 2026",
 			time: "11:45 AM",
 			amount: -124.5,
 			status: "Completed",
@@ -51,7 +51,7 @@ const TransactionsPage = () => {
 		{
 			id: 5,
 			name: "Restaurant",
-			date: "Mar 8, 2025",
+			date: "Mar 8, 2026",
 			time: "7:30 PM",
 			amount: -56.2,
 			status: "Completed",
@@ -61,7 +61,7 @@ const TransactionsPage = () => {
 		{
 			id: 6,
 			name: "Digital Subscription",
-			date: "Mar 5, 2025",
+			date: "Mar 5, 2026",
 			time: "12:00 AM",
 			amount: -9.99,
 			status: "Completed",
@@ -71,7 +71,7 @@ const TransactionsPage = () => {
 		{
 			id: 7,
 			name: "Friend Payment",
-			date: "Mar 3, 2025",
+			date: "Mar 3, 2026",
 			time: "6:15 PM",
 			amount: 25.0,
 			status: "Completed",
@@ -81,7 +81,7 @@ const TransactionsPage = () => {
 		{
 			id: 8,
 			name: "Internet Bill",
-			date: "Mar 1, 2025",
+			date: "Mar 1, 2026",
 			time: "9:30 AM",
 			amount: -65.0,
 			status: "Completed",
@@ -133,7 +133,10 @@ const TransactionsPage = () => {
 								<option value="thisYear">This year</option>
 								<option value="allTime">All time</option>
 							</select>
-							<button className="bg-slate-100 text-slate-700 px-4 py-2 rounded">
+							<button
+								className="bg-slate-100 text-slate-700 px-4 py-2 rounded"
+								onClick={() => alert("Export functionality coming soon!")}
+							>
 								Export
 							</button>
 						</div>

@@ -42,9 +42,11 @@ const RegisterPage = () => {
 
 	return (
 		<div className="min-h-screen flex items-center justify-center bg-slate-50 p-4">
-			<div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+			<div className="bg-[#E5E3DC] p-8 rounded-lg shadow-md w-full max-w-md">
 				<div className="flex justify-center mb-8">
-					<div className="bg-purple-700 h-16 w-16 rounded-full"></div>
+					<div className="bg-[#E4570A] h-16 w-16 rounded-full flex justify-center items-center">
+						<span className="text-white text-3xl">T</span>
+					</div>
 				</div>
 				<h1 className="text-2xl font-bold text-center mb-6">
 					Create an Account
@@ -63,7 +65,7 @@ const RegisterPage = () => {
 							<input
 								id="firstName"
 								type="text"
-								className="w-full p-3 border border-slate-300 rounded"
+								className="w-full p-3 border border-[#E4570A] rounded"
 								value={firstName}
 								onChange={(e) => setFirstName(e.target.value)}
 								required
@@ -76,7 +78,7 @@ const RegisterPage = () => {
 							<input
 								id="lastName"
 								type="text"
-								className="w-full p-3 border border-slate-300 rounded"
+								className="w-full p-3 border border-[#E4570A] rounded"
 								value={lastName}
 								onChange={(e) => setLastName(e.target.value)}
 								required
@@ -90,7 +92,7 @@ const RegisterPage = () => {
 						<input
 							id="email"
 							type="email"
-							className="w-full p-3 border border-slate-300 rounded"
+							className="w-full p-3 border border-[#E4570A] rounded"
 							value={email}
 							onChange={(e) => setEmail(e.target.value)}
 							required
@@ -103,7 +105,7 @@ const RegisterPage = () => {
 						<input
 							id="password"
 							type="password"
-							className="w-full p-3 border border-slate-300 rounded"
+							className="w-full p-3 border border-[#E4570A] rounded"
 							value={password}
 							onChange={(e) => setPassword(e.target.value)}
 							required
@@ -119,7 +121,7 @@ const RegisterPage = () => {
 						<input
 							id="confirmPassword"
 							type="password"
-							className="w-full p-3 border border-slate-300 rounded"
+							className="w-full p-3 border border-[#E4570A] rounded"
 							value={confirmPassword}
 							onChange={(e) => setConfirmPassword(e.target.value)}
 							required
@@ -127,7 +129,7 @@ const RegisterPage = () => {
 					</div>
 					<button
 						type="submit"
-						className="w-full bg-purple-700 text-white p-3 rounded font-medium"
+						className="w-full bg-[#E4570A] text-white p-3 rounded font-medium"
 						disabled={loading}
 					>
 						{loading ? "Creating account..." : "Create Account"}
@@ -136,7 +138,7 @@ const RegisterPage = () => {
 
 				<p className="text-center mt-6">
 					Already have an account?{" "}
-					<Link to="/login" className="text-purple-700">
+					<Link to="/login" className="text-[#E4570A]">
 						Login
 					</Link>
 				</p>

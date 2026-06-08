@@ -87,4 +87,11 @@ export const billsApi = {
 	buyData: (data) => api.post("/bills/data", data),
 };
 
+// ── Card endpoints ─────────────────────────────────────────────────────────────
+export const cardsApi = {
+	getAll: () => api.get("/cards"),
+	create: (data) => api.post("/cards/create", data),
+	fund: (data) => api.post("/cards/fund", data),
+};
+
 export default api;

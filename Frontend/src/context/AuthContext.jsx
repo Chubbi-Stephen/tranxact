@@ -1,37 +1,82 @@
 import { createContext, useContext, useState } from "react";
+import { authApi } from "../services/api";
 
 const AuthContext = createContext();
 
-export const AuthProvider = ({ children }) => {
-	const [user, setUser] = useState(null);
+const getStoredUser = () => {
+	try {
+		const stored = localStorage.getItem("user");
+		return stored ? JSON.parse(stored) : null;
+	} catch {
+		return null;
+	}
+};
 
-	// Mock login function - replace with actual API call later
-	const login = async (email, password) => {
-		// Simulate API call
-		return new Promise((resolve) => {
-			setTimeout(() => {
-				// Mock successful login
-				const userData = {
-					id: "123",
-					firstName: "John",
-					lastName: "Doe",
-					email: email,
-					initials: "JD",
-				};
-				setUser(userData);
-				localStorage.setItem("user", JSON.stringify(userData));
-				resolve(userData);
-			}, 1000);
-		});
+export const AuthProvider = ({ children }) => {
+	const [user, setUser] = useState(getStoredUser);
+	const [token, setToken] = useState(() => localStorage.getItem("token") || null);
+	const [loading, setLoading] = useState(false);
+
+	const _saveSession = (userData, jwtToken) => {
+		setUser(userData);
+		setToken(jwtToken);
+		localStorage.setItem("user", JSON.stringify(userData));
+		localStorage.setItem("token", jwtToken);
 	};
 
-	const logout = () => {
+	const _clearSession = () => {
 		setUser(null);
+		setToken(null);
 		localStorage.removeItem("user");
+		localStorage.removeItem("token");
+	};
+
+	const login = async (email, password) => {
+		setLoading(true);
+		try {
+			const { data } = await authApi.login({ email, password });
+			_saveSession(data.user, data.token);
+			return data;
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	const register = async (formData) => {
+		setLoading(true);
+		try {
+			const { data } = await authApi.register(formData);
+			_saveSession(data.user, data.token);
+			return data;
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	const logout = async () => {
+		try {
+			await authApi.logout();
+		} catch {
+			// Still clear session even if the API call fails
+		} finally {
+			_clearSession();
+		}
+	};
+
+	const refreshUser = async () => {
+		try {
+			const { data } = await authApi.getProfile();
+			const updated = data.user;
+			setUser(updated);
+			localStorage.setItem("user", JSON.stringify(updated));
+			return updated;
+		} catch {
+			return null;
+		}
 	};
 
 	return (
-		<AuthContext.Provider value={{ user, login, logout }}>
+		<AuthContext.Provider value={{ user, token, loading, login, register, logout, refreshUser }}>
 			{children}
 		</AuthContext.Provider>
 	);

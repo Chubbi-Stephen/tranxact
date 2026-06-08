@@ -1,73 +1,63 @@
 import { useState } from "react";
+import { Send, Download, Plus, CreditCard } from "lucide-react";
 import SendMoneyModal from "../Modals/SendMoneyModal";
 import ReceiveMoneyModal from "../Modals/RecieveMoneyModal";
-import PaymentModal from "../Modals/PaymentModal";
-import MoreActionsModal from "../Modals/MoreActionsModal";
+import AddMoneyModal from "../Modals/AddMoneyModal";
+import FundWalletModal from "../Modals/FundWalletModal";
+import BillsModal from "../Modals/BillsModal";
 
-const QuickActions = () => {
+const QuickActions = ({ onRefresh }) => {
 	const [activeModal, setActiveModal] = useState(null);
 
-	const actions = [
-		{
-			icon: "↑",
-			label: "Send",
-			action: () => setActiveModal("send"),
-			bgColor: "bg-blue-100",
-			textColor: "text-blue-600",
-		},
-		{
-			icon: "↓",
-			label: "Receive",
-			action: () => setActiveModal("receive"),
-			bgColor: "bg-green-100",
-			textColor: "text-green-600",
-		},
-		{
-			icon: "$",
-			label: "Pay",
-			action: () => setActiveModal("pay"),
-			bgColor: "bg-purple-100",
-			textColor: "text-purple-600",
-		},
-		{
-			icon: "⋮",
-			label: "More",
-			action: () => setActiveModal("more"),
-			bgColor: "bg-orange-100",
-			textColor: "text-orange-600",
-		},
-	];
-
-	const closeModal = () => setActiveModal(null);
+	const ActionButton = ({ icon: Icon, label, onClick, colorClass = "bg-white text-[#E4570A]" }) => (
+		<button className="flex flex-col items-center group" onClick={onClick}>
+			<div className={`${colorClass} h-14 w-14 rounded-2xl flex items-center justify-center mb-2 shadow-sm group-hover:shadow-md transition-all group-hover:translate-y-[-2px] border border-slate-100`}>
+				<Icon size={20} strokeWidth={2.5} />
+			</div>
+			<span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{label}</span>
+		</button>
+	);
 
 	return (
 		<>
-			<div className="bg-[#F5F5F5] p-6 rounded-lg border border-slate-200">
-				<h3 className="text-slate-500 font-medium">Quick Actions</h3>
-				<div className="grid grid-cols-4 gap-4 mt-4">
-					{actions.map((action, index) => (
-						<button
-							key={index}
-							className="flex flex-col items-center"
-							onClick={action.action}
-						>
-							<div
-								className={`${action.bgColor} h-16 w-16 rounded-lg flex items-center justify-center mb-2`}
-							>
-								<span className={`text-xl ${action.textColor}`}>
-									{action.icon}
-								</span>
-							</div>
-							<span className="text-sm text-slate-900">{action.label}</span>
-						</button>
-					))}
+			<div className="bg-[#F8F9FA] p-6 rounded-2xl border border-slate-100 shadow-sm">
+				<h3 className="text-slate-400 font-bold text-[10px] uppercase tracking-[0.2em] mb-6">Quick Actions</h3>
+				<div className="flex justify-between items-center px-2">
+					<ActionButton 
+						icon={Send} 
+						label="Send" 
+						onClick={() => setActiveModal("send")}
+					/>
+					<ActionButton 
+						icon={Download} 
+						label="Receive" 
+						onClick={() => setActiveModal("receive")}
+					/>
+					<ActionButton 
+						icon={Plus} 
+						label="Add" 
+						onClick={() => setActiveModal("add")}
+					/>
+					<ActionButton 
+						icon={CreditCard} 
+						label="Pay" 
+						onClick={() => setActiveModal("pay")}
+					/>
 				</div>
 			</div>
 
-			{activeModal === "send" && <SendMoneyModal onClose={closeModal} />}
-			{activeModal === "receive" && <ReceiveMoneyModal onClose={closeModal} />}
-			{activeModal === "pay" && <PaymentModal onClose={closeModal} />}
-			{activeModal === "more" && <MoreActionsModal onClose={closeModal} />}
+			{activeModal === "send" && (
+				<SendMoneyModal onClose={() => setActiveModal(null)} onRefresh={onRefresh} />
+			)}
+			{activeModal === "add" && (
+				<FundWalletModal onClose={() => setActiveModal(null)} onRefresh={onRefresh} />
+			)}
+			{activeModal === "pay" && (
+				<BillsModal onClose={() => setActiveModal(null)} onRefresh={onRefresh} />
+			)}
+			{activeModal === "receive" && (
+				<ReceiveMoneyModal onClose={() => setActiveModal(null)} />
+			)}
 		</>
 	);
 };

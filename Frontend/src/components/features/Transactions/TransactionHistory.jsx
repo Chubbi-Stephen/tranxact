@@ -1,65 +1,42 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import TransactionItem from "./TransactionItem";
+import { transactionsApi } from "../../../services/api";
 
-const TransactionHistory = ({ limit }) => {
+const TransactionHistory = ({ limit, refreshTrigger }) => {
 	const [filter, setFilter] = useState("all");
+	const [transactions, setTransactions] = useState([]);
+	const [loading, setLoading] = useState(true);
 
-	const transactions = [
-		{
-			id: 1,
-			name: "Coffee Shop",
-			date: "Mar 19, 2025",
-			time: "10:23 AM",
-			amount: -4.5,
-			status: "Completed",
-			type: "outgoing",
-		},
-		{
-			id: 2,
-			name: "Paycheck",
-			date: "Mar 15, 2025",
-			time: "9:00 AM",
-			amount: 1250.0,
-			status: "Completed",
-			type: "incoming",
-		},
-		{
-			id: 3,
-			name: "Grocery Store",
-			date: "Mar 14, 2025",
-			time: "4:17 PM",
-			amount: -87.32,
-			status: "Completed",
-			type: "outgoing",
-		},
-		{
-			id: 4,
-			name: "Electricity Bill",
-			date: "Mar 10, 2025",
-			time: "11:45 AM",
-			amount: -124.5,
-			status: "Completed",
-			type: "outgoing",
-		},
-	];
+	const fetchTransactions = useCallback(async () => {
+		try {
+			setLoading(true);
+			const params = {
+				limit: limit || 50,
+			};
+			if (filter !== "all") {
+				params.type = filter === "incoming" ? "credit" : "debit";
+			}
+			const { data } = await transactionsApi.getAll(params);
+			setTransactions(data);
+		} catch (error) {
+			console.error("Failed to fetch transactions:", error);
+		} finally {
+			setLoading(false);
+		}
+	}, [limit, filter]);
 
-	const filteredTransactions = transactions.filter((t) => {
-		if (filter === "all") return true;
-		return t.type === filter;
-	});
-
-	const displayTransactions = limit
-		? filteredTransactions.slice(0, limit)
-		: filteredTransactions;
+	useEffect(() => {
+		fetchTransactions();
+	}, [fetchTransactions, refreshTrigger]);
 
 	return (
 		<div className="bg-[#E5E3DC] p-6 rounded-lg border border-slate-200">
 			<h3 className="text-slate-500 font-medium">Recent Transactions</h3>
-			<div className="flex gap-4 mt-4">
+			<div className="flex gap-2 mt-4 overflow-x-auto pb-2">
 				<button
-					className={`px-6 py-2 rounded-full text-sm ${
+					className={`px-6 py-2 rounded-full text-sm whitespace-nowrap ${
 						filter === "all"
-							? "bg-slate-100 text-slate-900"
+							? "bg-slate-900 text-white"
 							: "bg-white text-slate-500 border border-slate-200"
 					}`}
 					onClick={() => setFilter("all")}
@@ -67,9 +44,9 @@ const TransactionHistory = ({ limit }) => {
 					All
 				</button>
 				<button
-					className={`px-6 py-2 rounded-full text-sm ${
+					className={`px-6 py-2 rounded-full text-sm whitespace-nowrap ${
 						filter === "incoming"
-							? "bg-slate-100 text-slate-900"
+							? "bg-slate-900 text-white"
 							: "bg-white text-slate-500 border border-slate-200"
 					}`}
 					onClick={() => setFilter("incoming")}
@@ -77,9 +54,9 @@ const TransactionHistory = ({ limit }) => {
 					Incoming
 				</button>
 				<button
-					className={`px-6 py-2 rounded-full text-sm ${
+					className={`px-6 py-2 rounded-full text-sm whitespace-nowrap ${
 						filter === "outgoing"
-							? "bg-slate-100 text-slate-900"
+							? "bg-slate-900 text-white"
 							: "bg-white text-slate-500 border border-slate-200"
 					}`}
 					onClick={() => setFilter("outgoing")}
@@ -87,10 +64,16 @@ const TransactionHistory = ({ limit }) => {
 					Outgoing
 				</button>
 			</div>
-			<div className="mt-4">
-				{displayTransactions.map((transaction) => (
-					<TransactionItem key={transaction.id} transaction={transaction} />
-				))}
+			<div className="mt-4 space-y-3">
+				{loading ? (
+					<div className="py-8 text-center text-slate-500">Loading transactions...</div>
+				) : transactions.length > 0 ? (
+					transactions.map((transaction) => (
+						<TransactionItem key={transaction._id} transaction={transaction} />
+					))
+				) : (
+					<div className="py-8 text-center text-slate-500">No transactions found.</div>
+				)}
 			</div>
 		</div>
 	);

@@ -1,10 +1,14 @@
 import { useState } from "react";
 import Modal from "./Modal";
+import { transactionsApi } from "../../../services/api";
+import { useAuth } from "../../../hooks/useAuth";
 
-const AddMoneyModal = ({ onClose }) => {
+const AddMoneyModal = ({ onClose, onRefresh }) => {
 	const [amount, setAmount] = useState("");
 	const [paymentMethod, setPaymentMethod] = useState("");
 	const [loading, setLoading] = useState(false);
+	const [error, setError] = useState("");
+	const { refreshUser } = useAuth();
 
 	const paymentMethods = [
 		{ id: "bank", name: "Bank Transfer", icon: "🏦" },
@@ -15,22 +19,25 @@ const AddMoneyModal = ({ onClose }) => {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		setLoading(true);
+		setError("");
 
 		try {
-			// Here you would add the API call to add money
-			console.log("Adding money", { amount, paymentMethod });
+			const selectedMethod = paymentMethods.find((m) => m.id === paymentMethod);
+			const idempotencyKey = crypto.randomUUID();
+			
+			await transactionsApi.create({
+				amount: parseFloat(amount),
+				type: "credit",
+				category: "Income",
+				description: `Added via ${selectedMethod?.name || "Manual Deposit"}`,
+			}, { "X-Idempotency-Key": idempotencyKey });
 
-			// Simulate API call
-			await new Promise((resolve) => setTimeout(resolve, 1000));
+			await refreshUser();
+			if (onRefresh) onRefresh();
 
-			// Close modal on success
 			onClose();
-
-			// Show success notification
-			alert(`$${amount} added successfully!`);
-		} catch (error) {
-			console.error("Error adding money:", error);
-			alert("Failed to add money. Please try again.");
+		} catch (err) {
+			setError(err.response?.data?.message || "Failed to add money.");
 		} finally {
 			setLoading(false);
 		}
@@ -39,6 +46,7 @@ const AddMoneyModal = ({ onClose }) => {
 	return (
 		<Modal title="Add Money" onClose={onClose}>
 			<form onSubmit={handleSubmit}>
+				{error && <div className="mb-4 p-3 bg-red-100 text-red-600 rounded text-sm">{error}</div>}
 				<div className="mb-6">
 					<label className="block text-slate-700 mb-2" htmlFor="amount">
 						Amount ($)

@@ -1,31 +1,44 @@
 import { useState } from "react";
 import Modal from "./Modal";
+import { transactionsApi } from "../../../services/api";
+import { useAuth } from "../../../hooks/useAuth";
 
-const SendMoneyModal = ({ onClose }) => {
+const SendMoneyModal = ({ onClose, onRefresh }) => {
 	const [recipient, setRecipient] = useState("");
 	const [amount, setAmount] = useState("");
 	const [note, setNote] = useState("");
 	const [loading, setLoading] = useState(false);
+	const [error, setError] = useState("");
+	const { user, refreshUser } = useAuth();
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
+		const numAmount = parseFloat(amount);
+
+		if (numAmount > user.balance) {
+			setError("Insufficient balance.");
+			return;
+		}
+
 		setLoading(true);
+		setError("");
 
 		try {
-			// Here you would add the API call to send money
-			console.log("Sending money", { recipient, amount, note });
+			const idempotencyKey = crypto.randomUUID();
+			await transactionsApi.create({
+				amount: numAmount,
+				type: "debit",
+				category: "Transfer",
+				description: `Transfer to ${recipient}${note ? `: ${note}` : ""}`,
+			}, { "X-Idempotency-Key": idempotencyKey });
 
-			// Simulate API call
-			await new Promise((resolve) => setTimeout(resolve, 1000));
+			// Refresh global user state (balance) and local page state
+			await refreshUser();
+			if (onRefresh) onRefresh();
 
-			// Close modal on success
 			onClose();
-
-			// Show success notification (you would implement this)
-			alert("Money sent successfully!");
-		} catch (error) {
-			console.error("Error sending money:", error);
-			alert("Failed to send money. Please try again.");
+		} catch (err) {
+			setError(err.response?.data?.message || "Failed to send money.");
 		} finally {
 			setLoading(false);
 		}
@@ -34,6 +47,7 @@ const SendMoneyModal = ({ onClose }) => {
 	return (
 		<Modal title="Send Money" onClose={onClose}>
 			<form onSubmit={handleSubmit}>
+				{error && <div className="mb-4 p-3 bg-red-100 text-red-600 rounded text-sm">{error}</div>}
 				<div className="mb-4">
 					<label className="block text-slate-700 mb-2" htmlFor="recipient">
 						Recipient

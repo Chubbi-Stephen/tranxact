@@ -9,11 +9,31 @@ import RegisterPage from "./pages/Register/RegisterPage";
 import VerifyEmailPage from "./pages/VerifyEmailPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
 import { AuthProvider } from "./context/AuthContext";
+import { ThemeProvider } from "./context/ThemeContext";
 import ProtectedRoute from "./components/common/ProtectedRoute";
+import { Toaster } from "react-hot-toast";
 
 function App() {
 	return (
+		<ThemeProvider>
 		<AuthProvider>
+			<Toaster 
+				position="top-center" 
+				toastOptions={{
+					duration: 4000,
+					style: {
+						background: '#013653',
+						color: '#fff',
+						borderRadius: '1rem',
+						fontSize: '12px',
+						fontWeight: '900',
+						textTransform: 'uppercase',
+						letterSpacing: '0.1em',
+						padding: '16px 24px',
+						boxShadow: '0 20px 40px rgba(0,0,0,0.2)'
+					}
+				}} 
+			/>
 			<Router>
 				<Routes>
 					<Route path="/login" element={<LoginPage />} />
@@ -57,6 +77,7 @@ function App() {
 				</Routes>
 			</Router>
 		</AuthProvider>
+		</ThemeProvider>
 	);
 }
 

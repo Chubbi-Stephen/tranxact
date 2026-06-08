@@ -1,5 +1,4 @@
 import { useAuth } from "../../../hooks/useAuth";
-import { useNavigate } from "react-router-dom";
 
 const Header = () => {
 	const { user } = useAuth();

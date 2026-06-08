@@ -1,4 +1,10 @@
 const AuthService = require('../services/authService');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+const User = require('../models/User');
+
+const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_EXPIRES_IN = '24h';
 
 const register = async (req, res) => {
     try {
@@ -11,26 +17,20 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
     try {
-        const { token, user } = await AuthService.login(req.body);
-        res.status(200).json({ token, user });
+        const { user, token } = await AuthService.login(req.body);
+        res.status(200).json({ user, token });
     } catch (error) {
-        const status = error.message === 'User not found' ? 404 : 401;
-        res.status(status).json({ message: error.message });
+        res.status(401).json({ message: error.message });
     }
 };
 
 const logout = async (req, res) => {
-    try {
-        const result = await AuthService.logout(req.user._id);
-        res.status(200).json(result);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
+    res.status(200).json({ message: 'Logged out successfully' });
 };
 
 const refreshToken = async (req, res) => {
     try {
-        const { token } = await AuthService.refreshToken(req.body);
+        const { token } = await AuthService.refreshToken(req.user._id);
         res.status(200).json({ token });
     } catch (error) {
         res.status(401).json({ message: error.message });
@@ -79,4 +79,44 @@ const getProfile = async (req, res) => {
     }
 };
 
-module.exports = { register, login, logout, refreshToken, verifyToken, getProfile, verifyEmail, forgotPassword, resetPassword };
+const upgradeKyc = async (req, res) => {
+	try {
+		const user = await AuthService.upgradeKyc(req.user._id, req.body.bvn);
+		res.status(200).json({ message: 'KYC upgraded to Tier 2', user });
+	} catch (error) {
+		res.status(400).json({ message: error.message });
+	}
+};
+
+const updateProfile = async (req, res) => {
+	try {
+		const user = await AuthService.updateProfile(req.user._id, req.body);
+		res.status(200).json({ message: 'Profile updated', user });
+	} catch (error) {
+		res.status(400).json({ message: error.message });
+	}
+};
+
+const updateSettings = async (req, res) => {
+	try {
+		const user = await AuthService.updateSettings(req.user._id, req.body);
+		res.status(200).json({ message: 'Settings updated', user });
+	} catch (error) {
+		res.status(400).json({ message: error.message });
+	}
+};
+
+const changePassword = async (req, res) => {
+	try {
+		await AuthService.changePassword(req.user._id, req.body);
+		res.status(200).json({ message: 'Password changed successfully' });
+	} catch (error) {
+		res.status(400).json({ message: error.message });
+	}
+};
+
+module.exports = { 
+    register, login, logout, refreshToken, verifyToken, getProfile, 
+    verifyEmail, forgotPassword, resetPassword, upgradeKyc,
+    updateProfile, updateSettings, changePassword
+};

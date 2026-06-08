@@ -86,6 +86,49 @@ class AuthService {
         return true;
     }
 
+    async upgradeKyc(userId, bvn) {
+        const user = await User.findById(userId);
+        if (!user) throw new Error('User not found');
+        
+        // Simulating BVN validation
+        if (bvn.length !== 11) throw new Error('Invalid BVN. Must be 11 digits');
+        
+        user.bvn = bvn;
+        user.kycLevel = 2; // Upgraded to Tier 2
+        await user.save();
+        return user;
+    }
+
+    async updateProfile(userId, profileData) {
+        const user = await User.findByIdAndUpdate(
+            userId,
+            { $set: profileData },
+            { new: true, runValidators: true }
+        );
+        return user;
+    }
+
+    async updateSettings(userId, settingsData) {
+        const user = await User.findByIdAndUpdate(
+            userId,
+            { $set: { notifications: settingsData.notifications } },
+            { new: true }
+        );
+        return user;
+    }
+
+    async changePassword(userId, { oldPassword, newPassword }) {
+        const user = await User.findById(userId);
+        if (!user) throw new Error('User not found');
+        
+        const isMatch = await bcrypt.compare(oldPassword, user.password);
+        if (!isMatch) throw new Error('Incorrect old password');
+        
+        user.password = await bcrypt.hash(newPassword, 10);
+        await user.save();
+        return true;
+    }
+
     async login(credentials) {
         const { email, username, password } = credentials;
 

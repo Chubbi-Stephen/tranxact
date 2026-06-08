@@ -1,7 +1,11 @@
 import { useState } from "react";
 import { ArrowUpRight, ArrowDownLeft, FileText, CheckCircle2 } from "lucide-react";
+import { downloadReceipt } from "../../../utils/downloadReceipt";
+import { useAuth } from "../../../hooks/useAuth";
+import toast from "react-hot-toast";
 
 const TransactionItem = ({ transaction }) => {
+	const { user } = useAuth();
 	const isCredit = transaction.type === "credit";
 	const date = new Date(transaction.createdAt);
 	const formattedDate = date.toLocaleDateString("en-US", {
@@ -85,9 +89,12 @@ const TransactionItem = ({ transaction }) => {
 							</p>
 						</div>
 						
-						<button className="w-full mt-6 py-4 bg-slate-900 text-white rounded-2xl text-[10px] font-bold uppercase tracking-widest flex items-center justify-center space-x-2">
+						<button 
+							onClick={() => { downloadReceipt(transaction, user); toast.success("Receipt downloaded!"); }}
+							className="w-full mt-6 py-4 bg-slate-900 text-white rounded-2xl text-[10px] font-bold uppercase tracking-widest flex items-center justify-center space-x-2 active:scale-95 transition-transform"
+						>
 							<FileText size={14} />
-							<span>Download PDF</span>
+							<span>Download PDF Receipt</span>
 						</button>
 					</div>
 				</div>

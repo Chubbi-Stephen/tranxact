@@ -39,11 +39,16 @@ api.interceptors.response.use(
 export const authApi = {
 	register: (data) => api.post("/auth/register", data),
 	login: (data) => api.post("/auth/login", data),
-	verify: () => api.get("/auth/verify"),
+	logout: () => api.post("/auth/logout"),
+	verifyToken: () => api.get("/auth/verify"),
 	getProfile: () => api.get("/auth/profile"),
 	verifyEmail: (token) => api.post(`/auth/verify-email/${token}`),
 	forgotPassword: (email) => api.post("/auth/forgot-password", { email }),
 	resetPassword: (token, password) => api.post(`/auth/reset-password/${token}`, { password }),
+	upgradeKyc: (data) => api.post("/auth/upgrade-kyc", data),
+	updateProfile: (data) => api.put("/auth/update-profile", data),
+	updateSettings: (data) => api.put("/auth/update-settings", data),
+	changePassword: (data) => api.put("/auth/change-password", data),
 };
 
 // ── Transaction endpoints ──────────────────────────────────────────────────────

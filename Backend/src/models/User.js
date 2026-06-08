@@ -1,6 +1,12 @@
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
+    phone: String,
+    notifications: {
+        push: { type: Boolean, default: true },
+        email: { type: Boolean, default: true },
+        sms: { type: Boolean, default: false },
+    },
     username: {
         type: String,
         required: true,
@@ -45,6 +51,14 @@ const userSchema = new mongoose.Schema({
     verificationTokenExpires: Date,
     resetPasswordToken: String,
     resetPasswordExpires: Date,
+    kycLevel: {
+        type: Number,
+        default: 1, // 1: Unverified, 2: BVN Linked, 3: Full ID Verified
+    },
+    bvn: {
+        type: String,
+        select: false, // Don't return BVN in normal queries
+    },
     balance: {
         type: Number,
         default: 0,

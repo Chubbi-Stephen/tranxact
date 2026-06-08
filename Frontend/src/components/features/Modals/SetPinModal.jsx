@@ -4,23 +4,25 @@ import Modal from "./Modal";
 import { pinApi } from "../../../services/api";
 import { useAuth } from "../../../hooks/useAuth";
 
-const SetPinModal = ({ onClose, onSuccess }) => {
+const SetPinModal = ({ onClose, onRefresh }) => {
 	const [pin, setPin] = useState("");
-	const [confirmPin, setConfirmPin] = useState("");
 	const [step, setStep] = useState(1);
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState("");
+	const [input, setInput] = useState(""); // Track current typing progress
 	const { refreshUser } = useAuth();
 
 	const handleComplete = async (value) => {
 		if (step === 1) {
 			setPin(value);
 			setStep(2);
+			setInput("");
 		} else {
 			if (value !== pin) {
 				setError("PINs do not match. Try again.");
 				setPin("");
 				setStep(1);
+				setInput("");
 				return;
 			}
 			
@@ -28,11 +30,13 @@ const SetPinModal = ({ onClose, onSuccess }) => {
 			try {
 				await pinApi.set(value);
 				await refreshUser();
-				onSuccess();
+				if (onRefresh) onRefresh();
+				onClose();
 			} catch (err) {
 				setError("Failed to set PIN. Please try again.");
 				setPin("");
 				setStep(1);
+				setInput("");
 			} finally {
 				setLoading(false);
 			}
@@ -66,11 +70,14 @@ const SetPinModal = ({ onClose, onSuccess }) => {
 
 					<div className="flex justify-center space-x-4 mb-12">
 						{[1, 2, 3, 4].map((i) => (
-							<div key={i} className={`h-4 w-4 rounded-full bg-slate-100 transition-all shadow-inner`}></div>
+							<div 
+								key={i} 
+								className={`h-4 w-4 rounded-full transition-all shadow-inner ${input.length >= i ? "bg-[#E4570A] scale-110 shadow-[#E4570A]/20" : "bg-slate-100"}`}
+							></div>
 						))}
 					</div>
 
-					<PinPad onComplete={handleComplete} loading={loading} />
+					<PinPad input={input} setInput={setInput} onComplete={handleComplete} loading={loading} />
 				</div>
 			</div>
 		</div>
@@ -78,16 +85,15 @@ const SetPinModal = ({ onClose, onSuccess }) => {
 };
 
 // Internal mini-component for the numbers
-const PinPad = ({ onComplete, loading }) => {
-	const [input, setInput] = useState("");
-
+const PinPad = ({ input, setInput, onComplete, loading }) => {
 	const handleClick = (n) => {
 		if (input.length < 4) {
 			const newInput = input + n;
 			setInput(newInput);
 			if (newInput.length === 4) {
-				onComplete(newInput);
-				setInput(""); // Reset for next step
+				setTimeout(() => {
+					onComplete(newInput);
+				}, 100);
 			}
 		}
 	};

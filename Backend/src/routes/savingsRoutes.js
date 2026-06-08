@@ -10,4 +10,9 @@ router.get('/', savingsController.getSafelocks);
 router.post('/', idempotency, savingsController.createSafelock);
 router.post('/:id/withdraw', savingsController.withdrawMatured);
 
+// T-Vault Flexible Savings
+router.get('/vault', savingsController.getTVault);
+router.post('/vault/invest', idempotency, savingsController.invest);
+router.post('/vault/withdraw', idempotency, savingsController.withdraw);
+
 module.exports = router;

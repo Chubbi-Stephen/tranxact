@@ -81,8 +81,8 @@ const getProfile = async (req, res) => {
 
 const upgradeKyc = async (req, res) => {
 	try {
-		const user = await AuthService.upgradeKyc(req.user._id, req.body.bvn);
-		res.status(200).json({ message: 'KYC upgraded to Tier 2', user });
+		const user = await AuthService.upgradeKyc(req.user._id, req.body);
+		res.status(200).json({ message: 'KYC upgrade successful', user });
 	} catch (error) {
 		res.status(400).json({ message: error.message });
 	}

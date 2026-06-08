@@ -67,9 +67,19 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: '',
     },
-    isVerified: {
-        type: Boolean,
-        default: false,
+    referralCode: {
+        type: String,
+        unique: true,
+        default: () => Math.random().toString(36).substring(2, 8).toUpperCase(),
+    },
+    referredBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        default: null,
+    },
+    referralEarnings: {
+        type: Number,
+        default: 0,
     },
     createdAt: {
         type: Date,

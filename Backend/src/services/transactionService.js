@@ -38,6 +38,13 @@ class TransactionService {
 
             // 3. Commit everything to the database
             await session.commitTransaction();
+
+            // 4. Check for Referral Bonus (Asynchronous)
+            if (type === 'credit') {
+                const referralService = require('./referralService');
+                referralService.processFirstTransactionBonus(userId, amount);
+            }
+
             return transaction;
         } catch (error) {
             // 4. If ANYTHING fails, abort and undo all partial changes

@@ -7,10 +7,16 @@ const JWT_EXPIRES_IN = '7d';
 
 class AuthService {
     async register(userData) {
-        const { username, email, password, firstName = '', lastName = '' } = userData;
+        const { username, email, password, firstName = '', lastName = '', referralCode = '' } = userData;
 
         const existing = await User.findOne({ $or: [{ email }, { username }] });
         if (existing) throw new Error('A user with that email or username already exists');
+
+        let inviter = null;
+        if (referralCode) {
+            inviter = await User.findOne({ referralCode: referralCode.toUpperCase() });
+            if (!inviter) console.warn('Invalid referral code used:', referralCode);
+        }
 
         const hashedPassword = await bcrypt.hash(password, 10);
         
@@ -21,7 +27,8 @@ class AuthService {
 
         const newUser = new User({
             username, email, password: hashedPassword, firstName, lastName,
-            verificationToken, verificationTokenExpires
+            verificationToken, verificationTokenExpires,
+            referredBy: inviter ? inviter._id : null
         });
         await newUser.save();
 
@@ -86,15 +93,20 @@ class AuthService {
         return true;
     }
 
-    async upgradeKyc(userId, bvn) {
+    async upgradeKyc(userId, { level, bvn, documentType, documentNumber }) {
         const user = await User.findById(userId);
         if (!user) throw new Error('User not found');
         
-        // Simulating BVN validation
-        if (bvn.length !== 11) throw new Error('Invalid BVN. Must be 11 digits');
+        if (level === 2) {
+            if (!bvn || bvn.length !== 11) throw new Error('Invalid BVN. Must be 11 digits');
+            user.bvn = bvn;
+            user.kycLevel = 2;
+        } else if (level === 3) {
+            if (!documentType || !documentNumber) throw new Error('Document details are required for Tier 3');
+            user.kycLevel = 3;
+            // In production, we would save the document URL or hash
+        }
         
-        user.bvn = bvn;
-        user.kycLevel = 2; // Upgraded to Tier 2
         await user.save();
         return user;
     }

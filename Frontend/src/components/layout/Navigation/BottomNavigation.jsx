@@ -1,64 +1,43 @@
 import { NavLink } from "react-router-dom";
+import { Home, Wallet, ReceiptText, UserCircle2 } from "lucide-react";
 
 const BottomNavigation = () => {
-	return (
-		<nav className="fixed bottom-0 w-full bg-[#013653] border-t border-slate-200">
-			<div className="container mx-auto flex justify-around items-center py-3">
-				<NavLink
-					to="/"
-					className={({ isActive }) =>
-						`flex flex-col items-center ${
-							isActive ? "text-white" : "text-[#7C94B3]"
-						}`
-					}
-				>
-					<div className="bg-[#E4570A] h-12 w-12 rounded-full flex items-center justify-center mb-1">
-						<span>H</span>
-					</div>
-					<span className="text-xs">Home</span>
-				</NavLink>
-				<NavLink
-					to="/wallet"
-					className={({ isActive }) =>
-						`flex flex-col items-center ${
-							isActive ? "text-white" : "text-[#7C94B3]"
-						}`
-					}
-				>
-					<div className="bg-[#E4570A] h-12 w-12 rounded-full flex items-center justify-center mb-1">
-						<span>W</span>
-					</div>
-					<span className="text-xs">Wallet</span>
-				</NavLink>
-				<NavLink
-					to="/transactions"
-					className={({ isActive }) =>
-						`flex flex-col items-center ${
-							isActive ? "text-white" : "text-[#7C94B3]"
-						}`
-					}
-				>
-					<div className="bg-[#E4570A] h-12 w-12 rounded-full flex items-center justify-center mb-1">
-						<span>T</span>
-					</div>
-					<span className="text-xs">Transactions</span>
-				</NavLink>
-				<NavLink
-					to="/profile"
-					className={({ isActive }) =>
-						`flex flex-col items-center ${
-							isActive ? "text-white" : "text-[#7C94B3]"
-						}`
-					}
-				>
-					<div className="bg-[#E4570A] h-12 w-12 rounded-full flex items-center justify-center mb-1">
-						<span>P</span>
-					</div>
-					<span className="text-xs">Profile</span>
-				</NavLink>
-			</div>
-		</nav>
-	);
+    const navItems = [
+        { to: "/", label: "Home", icon: Home },
+        { to: "/wallet", label: "Wallet", icon: Wallet },
+        { to: "/transactions", label: "History", icon: ReceiptText },
+        { to: "/profile", label: "Profile", icon: UserCircle2 },
+    ];
+
+    return (
+        <nav className="fixed bottom-0 left-0 right-0 z-[100] bg-white/90 backdrop-blur-xl border-t border-slate-100 flex justify-around items-center px-4 py-2 safe-bottom shadow-[0_-8px_30px_rgb(0,0,0,0.04)]">
+            {navItems.map((item) => (
+                <NavLink
+                    key={item.to}
+                    to={item.to}
+                    className={({ isActive }) =>
+                        `flex flex-col items-center justify-center w-20 py-2 transition-all duration-300 ${
+                            isActive ? "text-[#E4570A] font-black" : "text-slate-400 font-medium"
+                        }`
+                    }
+                >
+                    {({ isActive }) => (
+                        <>
+                            <div className="relative">
+                                <item.icon 
+                                    size={22} 
+                                    className="mb-1" 
+                                    strokeWidth={isActive ? 2.5 : 2} 
+                                />
+                                <div className={`absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-[#E4570A] transition-all duration-300 ${isActive ? 'opacity-100 scale-100' : 'opacity-0 scale-0'}`}></div>
+                            </div>
+                            <span className="text-[10px] uppercase tracking-tighter">{item.label}</span>
+                        </>
+                    )}
+                </NavLink>
+            ))}
+        </nav>
+    );
 };
 
 export default BottomNavigation;

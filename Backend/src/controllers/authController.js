@@ -42,6 +42,33 @@ const verifyToken = async (req, res) => {
     res.status(200).json({ user: req.user });
 };
 
+const verifyEmail = async (req, res) => {
+	try {
+		const user = await AuthService.verifyEmail(req.params.token);
+		res.status(200).json({ message: 'Email verified successfully', user });
+	} catch (error) {
+		res.status(400).json({ message: error.message });
+	}
+};
+
+const forgotPassword = async (req, res) => {
+	try {
+		await AuthService.forgotPassword(req.body.email);
+		res.status(200).json({ message: 'Reset email sent' });
+	} catch (error) {
+		res.status(400).json({ message: error.message });
+	}
+};
+
+const resetPassword = async (req, res) => {
+	try {
+		await AuthService.resetPassword(req.params.token, req.body.password);
+		res.status(200).json({ message: 'Password reset successful' });
+	} catch (error) {
+		res.status(400).json({ message: error.message });
+	}
+};
+
 const getProfile = async (req, res) => {
     try {
         const user = await AuthService.getUserById(req.user._id);
@@ -52,4 +79,4 @@ const getProfile = async (req, res) => {
     }
 };
 
-module.exports = { register, login, logout, refreshToken, verifyToken, getProfile };
+module.exports = { register, login, logout, refreshToken, verifyToken, getProfile, verifyEmail, forgotPassword, resetPassword };

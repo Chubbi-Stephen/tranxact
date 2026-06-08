@@ -6,6 +6,8 @@ import TransactionsPage from "./pages/Transactions/TransactionsPage";
 import ProfilePage from "./pages/Profile/ProfilePage";
 import LoginPage from "./pages/Login/LoginPage";
 import RegisterPage from "./pages/Register/RegisterPage";
+import VerifyEmailPage from "./pages/VerifyEmailPage";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/common/ProtectedRoute";
 
@@ -16,6 +18,8 @@ function App() {
 				<Routes>
 					<Route path="/login" element={<LoginPage />} />
 					<Route path="/register" element={<RegisterPage />} />
+					<Route path="/verify/:token" element={<VerifyEmailPage />} />
+					<Route path="/reset-password/:token" element={<ResetPasswordPage />} />
 					<Route path="/" element={<Layout />}>
 						<Route
 							index

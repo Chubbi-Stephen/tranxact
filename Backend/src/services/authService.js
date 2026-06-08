@@ -9,24 +9,81 @@ class AuthService {
     async register(userData) {
         const { username, email, password, firstName = '', lastName = '' } = userData;
 
-        // Check for existing user
         const existing = await User.findOne({ $or: [{ email }, { username }] });
-        if (existing) {
-            throw new Error('A user with that email or username already exists');
-        }
+        if (existing) throw new Error('A user with that email or username already exists');
 
         const hashedPassword = await bcrypt.hash(password, 10);
+        
+        // Generate Verification Token
+        const crypto = require('crypto');
+        const verificationToken = crypto.randomBytes(32).toString('hex');
+        const verificationTokenExpires = Date.now() + 24 * 60 * 60 * 1000; // 24 hours
+
         const newUser = new User({
-            username,
-            email,
-            password: hashedPassword,
-            firstName,
-            lastName,
+            username, email, password: hashedPassword, firstName, lastName,
+            verificationToken, verificationTokenExpires
         });
         await newUser.save();
 
+        const sendEmail = require('../utils/sendEmail');
+        await sendEmail({
+            email: newUser.email,
+            subject: 'Verify your Tranxact Account',
+            message: `Please verify your account by using this token: ${verificationToken}`,
+            html: `<h1>Welcome to Tranxact</h1><p>Click here to verify: <a href="${process.env.FRONTEND_URL}/verify/${verificationToken}">Verify Now</a></p>`
+        });
+
         const token = jwt.sign({ id: newUser._id }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
         return { user: newUser, token };
+    }
+
+    async verifyEmail(token) {
+        const user = await User.findOne({
+            verificationToken: token,
+            verificationTokenExpires: { $gt: Date.now() }
+        });
+
+        if (!user) throw new Error('Invalid or expired verification token');
+
+        user.isVerified = true;
+        user.verificationToken = undefined;
+        user.verificationTokenExpires = undefined;
+        await user.save();
+        return user;
+    }
+
+    async forgotPassword(email) {
+        const user = await User.findOne({ email });
+        if (!user) throw new Error('No user found with that email');
+
+        const crypto = require('crypto');
+        const resetToken = crypto.randomBytes(32).toString('hex');
+        user.resetPasswordToken = resetToken;
+        user.resetPasswordExpires = Date.now() + 1 * 60 * 60 * 1000; // 1 hour
+        await user.save();
+
+        const sendEmail = require('../utils/sendEmail');
+        await sendEmail({
+            email: user.email,
+            subject: 'Password Reset Request',
+            message: `You requested a password reset. Use this token: ${resetToken}`,
+            html: `<p>Click here to reset your password: <a href="${process.env.FRONTEND_URL}/reset-password/${resetToken}">Reset Password</a></p>`
+        });
+    }
+
+    async resetPassword(token, newPassword) {
+        const user = await User.findOne({
+            resetPasswordToken: token,
+            resetPasswordExpires: { $gt: Date.now() }
+        });
+
+        if (!user) throw new Error('Invalid or expired reset token');
+
+        user.password = await bcrypt.hash(newPassword, 10);
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpires = undefined;
+        await user.save();
+        return true;
     }
 
     async login(credentials) {

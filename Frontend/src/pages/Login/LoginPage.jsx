@@ -1,10 +1,14 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { User, Lock, ArrowRight, Eye, EyeOff } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
+import ForgotPasswordModal from "../../components/features/Modals/ForgotPasswordModal";
 
 const LoginPage = () => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+	const [showPass, setShowPass] = useState(false);
+	const [showForgot, setShowForgot] = useState(false);
 	const [error, setError] = useState("");
 	const { login, loading } = useAuth();
 	const navigate = useNavigate();
@@ -16,70 +20,101 @@ const LoginPage = () => {
 			await login(email, password);
 			navigate("/");
 		} catch (err) {
-			const message = err.response?.data?.message || "Invalid email or password";
+			const message = err.response?.data?.message || "Invalid credentials";
 			setError(message);
 		}
 	};
 
 	return (
-		<div className="min-h-screen flex items-center justify-center bg-slate-50 p-4">
-			<div className="bg-[#E5E3DC] p-8 rounded-lg border border-slate-200 shadow-md w-full max-w-md">
-				<div className="flex justify-center mb-8">
-					<div className="bg-[#E4570A] h-16 w-16 rounded-full flex justify-center items-center">
-						<span className="text-white text-3xl font-bold">T</span>
+		<div className="min-h-screen flex items-center justify-center bg-slate-50 p-6 relative overflow-hidden">
+			{/* Decorative Elements */}
+			<div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#E4570A] opacity-5 -mr-64 -mt-64 rounded-full blur-[120px]"></div>
+			<div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[#013653] opacity-5 -ml-40 -mb-40 rounded-full blur-[100px]"></div>
+
+			<div className="bg-white w-full max-w-md rounded-[3rem] p-10 shadow-2xl relative z-10 border border-slate-100">
+				<div className="flex flex-col items-center mb-10">
+					<div className="bg-[#E4570A] h-20 w-20 rounded-[2rem] flex justify-center items-center shadow-xl shadow-[#E4570A]/20 mb-6 rotate-12">
+						<span className="text-white text-4xl font-black -rotate-12">T</span>
 					</div>
+					<h1 className="text-3xl font-black text-slate-900 tracking-tight">Welcome Back</h1>
+					<p className="text-sm font-medium text-slate-400 mt-2">Log in to manage your wealth</p>
 				</div>
-				<h1 className="text-2xl font-bold text-center mb-6">Login to Tranxact</h1>
 
 				{error && (
-					<p className="bg-red-100 text-red-600 p-3 rounded mb-4 text-sm">{error}</p>
+					<div className="bg-red-50 text-red-600 p-4 rounded-2xl mb-8 text-[11px] font-black uppercase tracking-wider flex items-center space-x-3">
+						<div className="bg-red-100 p-1 rounded-md">!</div>
+						<span>{error}</span>
+					</div>
 				)}
 
-				<form onSubmit={handleSubmit}>
-					<div className="mb-4">
-						<label className="block text-slate-700 mb-2" htmlFor="email">
-							Email
-						</label>
-						<input
-							id="email"
-							type="email"
-							className="w-full p-3 border border-[#E4570A] rounded focus:outline-none focus:ring-2 focus:ring-[#E4570A]/40"
-							value={email}
-							onChange={(e) => setEmail(e.target.value)}
-							required
-							autoComplete="email"
-						/>
+				<form onSubmit={handleSubmit} className="space-y-6">
+					<div>
+						<label className="block text-[10px] font-black uppercase tracking-[0.2em] text-slate-300 mb-2 ml-4">Email Address</label>
+						<div className="relative">
+							<input
+								type="email"
+								className="w-full p-5 bg-slate-50 border border-slate-100 rounded-[1.5rem] focus:border-[#E4570A] outline-none text-sm font-bold pl-14 shadow-inner"
+								placeholder="name@example.com"
+								value={email}
+								onChange={(e) => setEmail(e.target.value)}
+								required
+							/>
+							<User className="absolute left-6 top-5 text-slate-300" size={18} />
+						</div>
 					</div>
-					<div className="mb-6">
-						<label className="block text-slate-700 mb-2" htmlFor="password">
-							Password
-						</label>
-						<input
-							id="password"
-							type="password"
-							className="w-full p-3 border border-[#E4570A] rounded focus:outline-none focus:ring-2 focus:ring-[#E4570A]/40"
-							value={password}
-							onChange={(e) => setPassword(e.target.value)}
-							required
-							autoComplete="current-password"
-						/>
+
+					<div>
+						<div className="flex justify-between items-center mb-2 px-4">
+							<label className="block text-[10px] font-black uppercase tracking-[0.2em] text-slate-300">Password</label>
+							<button 
+								type="button" 
+								onClick={() => setShowForgot(true)}
+								className="text-[10px] font-black uppercase tracking-widest text-[#E4570A] hover:underline"
+							>
+								Forgot?
+							</button>
+						</div>
+						<div className="relative">
+							<input
+								type={showPass ? "text" : "password"}
+								className="w-full p-5 bg-slate-50 border border-slate-100 rounded-[1.5rem] focus:border-[#E4570A] outline-none text-sm font-bold pl-14 pr-14 shadow-inner"
+								placeholder="••••••••"
+								value={password}
+								onChange={(e) => setPassword(e.target.value)}
+								required
+							/>
+							<Lock className="absolute left-6 top-5 text-slate-300" size={18} />
+							<button
+								type="button"
+								onClick={() => setShowPass(!showPass)}
+								className="absolute right-6 top-5 text-slate-300 hover:text-slate-600"
+							>
+								{showPass ? <EyeOff size={18} /> : <Eye size={18} />}
+							</button>
+						</div>
 					</div>
+
 					<button
 						type="submit"
-						className="w-full bg-[#E4570A] text-white p-3 rounded font-medium hover:bg-[#c94508] transition-colors disabled:opacity-60"
 						disabled={loading}
+						className="w-full py-5 bg-slate-900 text-white rounded-full font-black text-[11px] uppercase tracking-[0.2em] shadow-xl hover:translate-y-[-2px] transition-all flex items-center justify-center space-x-3 active:scale-95 disabled:opacity-50"
 					>
-						{loading ? "Logging in..." : "Login"}
+						<span>{loading ? "Authenticating..." : "Sign In"}</span>
+						<ArrowRight size={16} />
 					</button>
 				</form>
 
-				<p className="text-center mt-6 text-sm">
-					Don&apos;t have an account?{" "}
-					<Link to="/register" className="text-[#E4570A] font-medium hover:underline">
-						Register
-					</Link>
-				</p>
+				<div className="mt-12 text-center">
+					<p className="text-sm font-medium text-slate-400">
+						New to Tranxact?{" "}
+						<Link to="/register" className="text-[#E4570A] font-black uppercase tracking-widest text-[11px] ml-2 hover:underline">
+							Create Account
+						</Link>
+					</p>
+				</div>
 			</div>
+
+			{showForgot && <ForgotPasswordModal onClose={() => setShowForgot(false)} />}
 		</div>
 	);
 };

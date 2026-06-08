@@ -1,7 +1,9 @@
 import { useState } from "react";
-import { Smartphone, Globe, Zap, Tv, ChevronLeft, CheckCircle2 } from "lucide-react";
+import { Smartphone, Globe, Zap, Tv, ChevronLeft, CheckCircle2, AlertCircle } from "lucide-react";
 import Modal from "./Modal";
-import { transactionsApi } from "../../../services/api";
+import PinModal from "./PinModal";
+import SetPinModal from "./SetPinModal";
+import { transactionsApi, pinApi } from "../../../services/api";
 import { useAuth } from "../../../hooks/useAuth";
 
 const NETWORKS = [
@@ -12,7 +14,7 @@ const NETWORKS = [
 ];
 
 const BillsModal = ({ onClose, onRefresh }) => {
-	const [step, setStep] = useState("menu");
+	const [step, setStep] = useState("menu"); // menu, airtime, data, pin, set-pin
 	const [network, setNetwork] = useState("");
 	const [phone, setPhone] = useState("");
 	const [amount, setAmount] = useState("");
@@ -20,14 +22,26 @@ const BillsModal = ({ onClose, onRefresh }) => {
 	const [error, setError] = useState("");
 	const { user, refreshUser } = useAuth();
 
-	const handleSubmit = async (e) => {
+	const handlePreSubmit = (e) => {
 		e.preventDefault();
 		if (parseFloat(amount) > user.balance) return setError("Insufficient balance.");
+		if (!network) return setError("Please select a network.");
 
+		if (!user.isPinSet) {
+			setStep("set-pin");
+		} else {
+			setStep("pin");
+		}
+	};
+
+	const handlePinComplete = async (pin) => {
 		setLoading(true);
 		setError("");
-
 		try {
+			// 1. Verify PIN
+			await pinApi.verify(pin);
+			
+			// 2. Process Bills
 			await transactionsApi.create({
 				amount: parseFloat(amount),
 				type: "debit",
@@ -39,11 +53,32 @@ const BillsModal = ({ onClose, onRefresh }) => {
 			if (onRefresh) onRefresh();
 			onClose();
 		} catch (err) {
-			setError(err.response?.data?.message || "Transaction failed");
+			setError(err.response?.data?.message || "Invalid PIN. Try again.");
+			setStep(step === 'airtime' || step === 'data' ? step : 'menu');
 		} finally {
 			setLoading(false);
 		}
 	};
+
+	if (step === "pin") {
+		return (
+			<PinModal 
+				title={`Authorize ₦${parseFloat(amount).toLocaleString()}`}
+				onClose={() => setStep(amount ? (phone ? 'airtime' : 'menu') : 'menu')}
+				onComplete={handlePinComplete}
+				loading={loading}
+			/>
+		);
+	}
+
+	if (step === "set-pin") {
+		return (
+			<SetPinModal 
+				onClose={() => setStep("menu")}
+				onSuccess={() => setStep("pin")}
+			/>
+		);
+	}
 
 	if (step === "menu") {
 		return (
@@ -81,8 +116,13 @@ const BillsModal = ({ onClose, onRefresh }) => {
 			onClose={() => setStep("menu")}
 			icon={<ChevronLeft size={20} />}
 		>
-			<form onSubmit={handleSubmit} className="space-y-6 pb-4">
-				{error && <div className="p-3 bg-red-50 text-red-600 rounded-xl text-[10px] font-bold uppercase tracking-wider">{error}</div>}
+			<form onSubmit={handlePreSubmit} className="space-y-6 pb-4">
+				{error && (
+					<div className="p-3 bg-red-50 text-red-600 rounded-xl flex items-center space-x-3">
+						<AlertCircle size={14} />
+						<span className="text-[10px] font-black uppercase tracking-wider">{error}</span>
+					</div>
+				)}
 				
 				<div>
 					<label className="block text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-4">Select Provider</label>
@@ -132,9 +172,9 @@ const BillsModal = ({ onClose, onRefresh }) => {
 				<button
 					type="submit"
 					disabled={loading || !network}
-					className="w-full py-4 bg-[#E4570A] text-white rounded-full font-black text-[10px] uppercase tracking-[0.2em] shadow-xl shadow-[#E4570A]/20 disabled:opacity-50 flex items-center justify-center space-x-2"
+					className="w-full py-4 bg-[#E4570A] text-white rounded-full font-black text-[10px] uppercase tracking-[0.2em] shadow-xl shadow-[#E4570A]/20 disabled:opacity-50 flex items-center justify-center space-x-2 transition-transform active:scale-95"
 				>
-					{loading ? "Processing..." : <><span>Purchase {step}</span> <CheckCircle2 size={14} /></>}
+					{loading ? "Processing..." : <><span>Authorize {step}</span> <CheckCircle2 size={14} /></>}
 				</button>
 			</form>
 		</Modal>

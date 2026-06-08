@@ -27,6 +27,15 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true,
+        minlength: 6,
+    },
+    transactionPin: {
+        type: String, // Hashed 4-digit PIN
+        select: false, // Don't include in normal queries for security
+    },
+    isPinSet: {
+        type: Boolean,
+        default: false
     },
     balance: {
         type: Number,
@@ -44,6 +53,13 @@ const userSchema = new mongoose.Schema({
         type: Date,
         default: Date.now,
     },
+}, {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
+});
+
+userSchema.virtual('hasPin').get(function() {
+    return !!this.transactionPin;
 });
 
 // Never return the password hash in API responses

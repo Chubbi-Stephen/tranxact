@@ -67,4 +67,10 @@ export const savingsApi = {
 	withdraw: (id) => api.post(`/savings/${id}/withdraw`),
 };
 
+// ── PIN endpoints ──────────────────────────────────────────────────────────────
+export const pinApi = {
+	set: (pin) => api.post("/pin/set", { pin }),
+	verify: (pin) => api.post("/pin/verify", { pin }),
+};
+
 export default api;

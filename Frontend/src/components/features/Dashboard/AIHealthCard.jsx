@@ -1,85 +1,94 @@
 import { useState, useEffect } from "react";
-import { Activity, TrendingUp, Lightbulb } from "lucide-react";
-import { aiApi } from "../../../services/api";
+import { Brain, TrendingUp, ShieldCheck, Sparkles, AlertCircle, ChevronRight, Activity } from "lucide-react";
+import axios from "axios";
 
 const AIHealthCard = ({ refreshTrigger }) => {
-	const [data, setData] = useState(null);
-	const [loading, setLoading] = useState(true);
+    const [health, setHealth] = useState(null);
+    const [loading, setLoading] = useState(true);
 
-	useEffect(() => {
-		const fetchHealth = async () => {
-			try {
-				setLoading(true);
-				const { data: result } = await aiApi.analyze();
-				setData(result);
-			} catch (error) {
-				console.error("Failed to fetch AI health:", error);
-			} finally {
-				setLoading(false);
-			}
-		};
-		fetchHealth();
-	}, [refreshTrigger]);
+    useEffect(() => {
+        fetchHealth();
+    }, [refreshTrigger]);
 
-	if (loading) return (
-		<div className="bg-[#013653] text-white p-6 rounded-[2rem] animate-pulse h-[160px]"></div>
-	);
+    const fetchHealth = async () => {
+        try {
+            const token = localStorage.getItem("token");
+            const { data } = await axios.get("http://localhost:5000/api/ai/analyze", {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            setHealth(data);
+        } catch (err) {
+            console.error("AI analysis failed");
+        } finally {
+            setLoading(false);
+        }
+    };
 
-	if (!data) return null;
+    if (loading) return (
+        <div className="bg-white p-8 rounded-[2.5rem] border border-slate-100 h-40 animate-pulse flex items-center justify-center">
+            <Brain className="text-slate-200" size={32} />
+        </div>
+    );
 
-	return (
-		<div className="bg-[#013653] text-white p-8 rounded-[2rem] shadow-2xl relative overflow-hidden flex flex-col md:flex-row gap-8">
-			{/* Decorative Elements */}
-			<div className="absolute top-0 right-0 w-64 h-64 bg-[#E4570A] opacity-10 blur-[100px] -mr-32 -mt-32"></div>
+    if (!health) return null;
 
-			<div className="flex flex-col items-center justify-center space-y-3 relative z-10">
-				<div className="relative w-28 h-28 flex items-center justify-center">
-					<svg className="w-full h-full transform -rotate-90">
-						<circle cx="56" cy="56" r="48" stroke="currentColor" strokeWidth="8" fill="transparent" className="text-white/5" />
-						<circle
-							cx="56"
-							cy="56"
-							r="48"
-							stroke="currentColor"
-							strokeWidth="8"
-							strokeDasharray={301.6}
-							strokeDashoffset={301.6 - (301.6 * data.healthScore) / 100}
-							strokeLinecap="round"
-							fill="transparent"
-							className="text-[#E4570A] transition-all duration-1000"
-						/>
-					</svg>
-					<div className="absolute flex flex-col items-center">
-						<span className="text-3xl font-black">{data.healthScore}</span>
-						<Activity size={12} className="text-[#E4570A]" />
-					</div>
-				</div>
-				<span className="text-[9px] uppercase tracking-[0.2em] font-black text-white/40">Health Metric</span>
-			</div>
+    const getScoreColor = (score) => {
+        if (score > 80) return "text-emerald-500 bg-emerald-50";
+        if (score > 60) return "text-[#E4570A] bg-orange-50";
+        return "text-amber-500 bg-amber-50";
+    };
 
-			<div className="flex-1 space-y-6 relative z-10">
-				<div className="flex items-start space-x-4">
-					<div className="bg-white/10 p-2 rounded-lg"><TrendingUp size={18} className="text-[#E4570A]" /></div>
-					<div>
-						<h3 className="text-[10px] font-black text-white/40 uppercase tracking-[0.2em] mb-1">Weekly Forecast</h3>
-						<p className="text-lg font-bold leading-tight tracking-tight">{data.forecast}</p>
-					</div>
-				</div>
-				
-				<div className="bg-white/5 backdrop-blur-sm p-4 rounded-2xl border border-white/5">
-					<div className="flex items-start space-x-4">
-						<Lightbulb size={20} className="text-[#E4570A] mt-1" />
-						<div>
-							<h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-[#E4570A] mb-1">AI Recommendation</h4>
-							<p className="text-xs text-white/60 leading-relaxed font-medium">
-								{data.recommendation}
-							</p>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	);
+    return (
+        <div className="bg-white p-7 rounded-[2.5rem] border border-slate-100 shadow-sm relative overflow-hidden group">
+            <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-all group-hover:scale-110 duration-700">
+                <Brain size={100} />
+            </div>
+
+            <div className="flex justify-between items-start mb-6">
+                <div className="flex items-center space-x-3">
+                    <div className="p-3 bg-slate-900 text-white rounded-2xl shadow-lg shadow-slate-900/20">
+                        <Activity size={20} />
+                    </div>
+                    <div>
+                        <h3 className="text-sm font-black text-slate-800 tracking-tight leading-none mb-1">Financial IQ</h3>
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Real-time Analysis</p>
+                    </div>
+                </div>
+                <div className={`px-4 py-2 rounded-full font-black text-xs ${getScoreColor(health.score)}`}>
+                    {health.score}%
+                </div>
+            </div>
+
+            <div className="bg-slate-50 p-6 rounded-[2rem] border border-slate-100 relative mb-4">
+                <div className="flex items-start space-x-4">
+                    <div className="p-3 bg-white rounded-xl shadow-sm text-slate-400">
+                        <Sparkles size={18} className="animate-pulse" />
+                    </div>
+                    <div>
+                        <p className="text-xs font-bold text-slate-700 leading-relaxed italic">
+                            "{health.recommendation}"
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div className="flex items-center justify-between px-2 pt-2">
+                <div className="flex items-center space-x-6">
+                    <div className="flex items-center space-x-2">
+                        <TrendingUp size={14} className={health.forecast === 'Upward' ? 'text-emerald-500' : 'text-slate-400'} />
+                        <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">{health.status} Growth</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                        <ShieldCheck size={14} className="text-emerald-500" />
+                        <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">Secure habits</span>
+                    </div>
+                </div>
+                <button className="h-10 w-10 bg-slate-900 text-white rounded-xl flex items-center justify-center hover:bg-[#E4570A] transition-all transform hover:rotate-12">
+                    <ChevronRight size={18} />
+                </button>
+            </div>
+        </div>
+    );
 };
 
 export default AIHealthCard;

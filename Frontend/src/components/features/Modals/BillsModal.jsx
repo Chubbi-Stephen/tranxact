@@ -1,184 +1,155 @@
 import { useState } from "react";
-import { Smartphone, Globe, Zap, Tv, ChevronLeft, CheckCircle2, AlertCircle } from "lucide-react";
-import Modal from "./Modal";
+import { X, Smartphone, Zap, Tv, ChevronRight, ArrowLeft, History } from "lucide-react";
+import toast from "react-hot-toast";
+import axios from "axios";
 import PinModal from "./PinModal";
-import SetPinModal from "./SetPinModal";
-import { transactionsApi, pinApi } from "../../../services/api";
-import { useAuth } from "../../../hooks/useAuth";
-
-const NETWORKS = [
-	{ id: "mtn", name: "MTN", color: "bg-yellow-400" },
-	{ id: "airtel", name: "Airtel", color: "bg-red-600" },
-	{ id: "glo", name: "Glo", color: "bg-green-600" },
-	{ id: "9mobile", name: "9mobile", color: "bg-green-900" },
-];
 
 const BillsModal = ({ onClose, onRefresh }) => {
-	const [step, setStep] = useState("menu"); // menu, airtime, data, pin, set-pin
-	const [network, setNetwork] = useState("");
-	const [phone, setPhone] = useState("");
-	const [amount, setAmount] = useState("");
-	const [loading, setLoading] = useState(false);
-	const [error, setError] = useState("");
-	const { user, refreshUser } = useAuth();
+    const [step, setStep] = useState("select"); // select, form, pin
+    const [service, setService] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [formData, setFormData] = useState({
+        provider: "",
+        meterNumber: "",
+        smartcardNumber: "",
+        amount: "",
+        plan: "",
+        type: "prepaid"
+    });
 
-	const handlePreSubmit = (e) => {
-		e.preventDefault();
-		if (parseFloat(amount) > user.balance) return setError("Insufficient balance.");
-		if (!network) return setError("Please select a network.");
+    const services = [
+        { id: "electricity", name: "Electricity", icon: Zap, color: "bg-amber-100 text-amber-600", providers: ["IKEDJA", "EKEDC", "AEDC", "KEDCO"] },
+        { id: "cable", name: "Cable TV", icon: Tv, color: "bg-blue-100 text-blue-600", providers: ["DSTV", "GOTV", "StarTimes"] },
+        { id: "data", name: "Mobile Data", icon: Smartphone, color: "bg-purple-100 text-purple-600", providers: ["MTN", "Airtel", "GLO", "9Mobile"] }
+    ];
 
-		if (!user.isPinSet) {
-			setStep("set-pin");
-		} else {
-			setStep("pin");
-		}
-	};
+    const handleSubmit = async (pin) => {
+        setLoading(true);
+        try {
+            const token = localStorage.getItem("token");
+            const endpoint = service.id === "electricity" ? "electricity" : service.id === "cable" ? "cable" : "data";
+            
+            await axios.post(`http://localhost:5000/api/bills/${endpoint}`, 
+                { ...formData, pin },
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
 
-	const handlePinComplete = async (pin) => {
-		setLoading(true);
-		setError("");
-		try {
-			// 1. Verify PIN
-			await pinApi.verify(pin);
-			
-			// 2. Process Bills
-			await transactionsApi.create({
-				amount: parseFloat(amount),
-				type: "debit",
-				category: "Bills",
-				description: `${step === 'airtime' ? 'Airtime' : 'Data'} Purchase - ${network.toUpperCase()} (${phone})`,
-			}, { "X-Idempotency-Key": crypto.randomUUID() });
+            toast.success(`${service.name} payment successful!`);
+            onRefresh();
+            onClose();
+        } catch (error) {
+            toast.error(error.response?.data?.message || "Payment failed");
+        } finally {
+            setLoading(false);
+        }
+    };
 
-			await refreshUser();
-			if (onRefresh) onRefresh();
-			onClose();
-		} catch (err) {
-			setError(err.response?.data?.message || "Invalid PIN. Try again.");
-			setStep(step === 'airtime' || step === 'data' ? step : 'menu');
-		} finally {
-			setLoading(false);
-		}
-	};
+    if (step === "pin") return <PinModal onClose={() => setStep("form")} onPinCorrect={handleSubmit} />;
 
-	if (step === "pin") {
-		return (
-			<PinModal 
-				title={`Authorize ₦${parseFloat(amount).toLocaleString()}`}
-				onClose={() => setStep(amount ? (phone ? 'airtime' : 'menu') : 'menu')}
-				onSuccess={handlePinComplete}
-				loading={loading}
-			/>
-		);
-	}
+    return (
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[999] flex items-center justify-center p-4">
+            <div className="bg-white w-full max-w-md rounded-[3rem] overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-300">
+                <div className="p-8">
+                    <div className="flex justify-between items-center mb-8">
+                        {step === "form" ? (
+                            <button onClick={() => setStep("select")} className="p-3 bg-slate-50 rounded-2xl text-slate-400 hover:text-slate-600 transition-colors">
+                                <ArrowLeft size={20} />
+                            </button>
+                        ) : (
+                            <div className="p-3 bg-[#E4570A]/10 rounded-2xl text-[#E4570A]">
+                                <History size={20} />
+                            </div>
+                        )}
+                        <h2 className="text-sm font-black uppercase tracking-widest text-slate-800">
+                            {step === "form" ? `Pay ${service.name}` : "Bill Payments"}
+                        </h2>
+                        <button onClick={onClose} className="p-3 bg-slate-50 rounded-2xl text-slate-400 hover:text-slate-600 transition-colors">
+                            <X size={20} />
+                        </button>
+                    </div>
 
-	if (step === "set-pin") {
-		return (
-			<SetPinModal 
-				onClose={() => setStep("menu")}
-				onSuccess={() => setStep("pin")}
-			/>
-		);
-	}
+                    {step === "select" ? (
+                        <div className="space-y-4">
+                            {services.map((s) => (
+                                <button
+                                    key={s.id}
+                                    onClick={() => { setService(s); setStep("form"); }}
+                                    className="w-full p-5 bg-slate-50 rounded-[2rem] flex items-center justify-between group hover:bg-slate-100 transition-all border border-transparent hover:border-slate-200"
+                                >
+                                    <div className="flex items-center space-x-4">
+                                        <div className={`p-4 ${s.color} rounded-2xl group-hover:scale-110 transition-transform`}>
+                                            <s.icon size={24} strokeWidth={2.5} />
+                                        </div>
+                                        <div className="text-left">
+                                            <p className="font-black text-slate-800 text-sm tracking-tight">{s.name}</p>
+                                            <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Instant Activation</p>
+                                        </div>
+                                    </div>
+                                    <ChevronRight size={18} className="text-slate-300 group-hover:translate-x-1 transition-transform" />
+                                </button>
+                            ))}
+                        </div>
+                    ) : (
+                        <div className="space-y-6">
+                            <div>
+                                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-2 mb-2 block">Choose Provider</label>
+                                <div className="grid grid-cols-2 gap-3">
+                                    {service.providers.map((p) => (
+                                        <button
+                                            key={p}
+                                            onClick={() => setFormData({ ...formData, provider: p })}
+                                            className={`p-4 rounded-2xl border-2 transition-all font-black text-xs uppercase tracking-widest ${formData.provider === p ? 'border-[#E4570A] bg-[#E4570A]/5 text-[#E4570A]' : 'border-slate-50 text-slate-400 hover:border-slate-100'}`}
+                                        >
+                                            {p}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
 
-	if (step === "menu") {
-		return (
-			<Modal title="Bills & Utilities" onClose={onClose}>
-				<div className="grid grid-cols-2 gap-4 pb-4">
-					<button onClick={() => setStep("airtime")} className="group p-8 bg-slate-50 rounded-[2rem] border border-slate-100 hover:border-[#E4570A] transition-all flex flex-col items-center">
-						<div className="bg-white p-4 rounded-2xl shadow-sm mb-4 group-hover:bg-[#E4570A] group-hover:text-white transition-colors">
-							<Smartphone size={28} />
-						</div>
-						<span className="text-xs font-black uppercase tracking-widest text-slate-800">Airtime</span>
-					</button>
-					
-					<button onClick={() => setStep("data")} className="group p-8 bg-slate-50 rounded-[2rem] border border-slate-100 hover:border-[#E4570A] transition-all flex flex-col items-center">
-						<div className="bg-white p-4 rounded-2xl shadow-sm mb-4 group-hover:bg-[#E4570A] group-hover:text-white transition-colors">
-							<Globe size={28} />
-						</div>
-						<span className="text-xs font-black uppercase tracking-widest text-slate-800">Data</span>
-					</button>
+                            <div className="bg-slate-50 p-6 rounded-[2rem] space-y-4">
+                                <div>
+                                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-2 block ml-1">
+                                        {service.id === "electricity" ? "Meter Number" : "Smartcard / IUC Number"}
+                                    </label>
+                                    <input
+                                        type="text"
+                                        placeholder="0000 0000 000"
+                                        value={service.id === "electricity" ? formData.meterNumber : formData.smartcardNumber}
+                                        onChange={(e) => setFormData({ ...formData, [service.id === "electricity" ? "meterNumber" : "smartcardNumber"]: e.target.value })}
+                                        className="w-full bg-transparent border-none text-xl font-black text-slate-800 placeholder:text-slate-300 focus:ring-0 p-0"
+                                    />
+                                </div>
 
-					<div className="col-span-2 p-6 bg-slate-100 rounded-[2rem] border border-slate-200/50 opacity-40 flex items-center justify-between px-8">
-						<div className="flex items-center space-x-4">
-							<Zap size={20} className="text-slate-400" />
-							<span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Electricity & TV</span>
-						</div>
-						<span className="text-[8px] font-black uppercase bg-white px-2 py-1 rounded-full text-slate-400">Coming Soon</span>
-					</div>
-				</div>
-			</Modal>
-		);
-	}
+                                <div className="h-px bg-slate-200"></div>
 
-	return (
-		<Modal 
-			title={`Buy ${step.toUpperCase()}`} 
-			onClose={() => setStep("menu")}
-			icon={<ChevronLeft size={20} />}
-		>
-			<form onSubmit={handlePreSubmit} className="space-y-6 pb-4">
-				{error && (
-					<div className="p-3 bg-red-50 text-red-600 rounded-xl flex items-center space-x-3">
-						<AlertCircle size={14} />
-						<span className="text-[10px] font-black uppercase tracking-wider">{error}</span>
-					</div>
-				)}
-				
-				<div>
-					<label className="block text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-4">Select Provider</label>
-					<div className="grid grid-cols-4 gap-3">
-						{NETWORKS.map((n) => (
-							<button
-								key={n.id}
-								type="button"
-								onClick={() => setNetwork(n.id)}
-								className={`flex flex-col items-center p-3 rounded-2xl border transition-all ${
-									network === n.id ? 'border-[#E4570A] bg-[#E4570A]/5 shadow-sm' : 'border-slate-50 bg-slate-50'
-								}`}
-							>
-								<div className={`h-8 w-8 ${n.color} rounded-full mb-2 shadow-sm`}></div>
-								<span className="text-[8px] font-black uppercase text-slate-600">{n.name}</span>
-							</button>
-						))}
-					</div>
-				</div>
+                                <div>
+                                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-2 block ml-1">Plan / Amount</label>
+                                    <div className="flex items-center">
+                                        <span className="text-xl font-black text-slate-300 mr-2">₦</span>
+                                        <input
+                                            type="number"
+                                            placeholder="0.00"
+                                            value={formData.amount}
+                                            onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
+                                            className="w-full bg-transparent border-none text-xl font-black text-slate-800 placeholder:text-slate-300 focus:ring-0 p-0"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
 
-				<div className="space-y-4">
-					<div>
-						<label className="block text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-2">Recipient Phone</label>
-						<input
-							type="tel"
-							className="w-full p-4 bg-slate-50 border border-slate-100 rounded-2xl focus:border-[#E4570A] outline-none text-sm font-bold"
-							placeholder="0801 000 0000"
-							value={phone}
-							onChange={(e) => setPhone(e.target.value)}
-							required
-						/>
-					</div>
-
-					<div>
-						<label className="block text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-2">Amount (₦)</label>
-						<input
-							type="number"
-							className="w-full p-4 bg-slate-50 border border-slate-100 rounded-2xl focus:border-[#E4570A] outline-none text-xl font-black"
-							placeholder="0"
-							value={amount}
-							onChange={(e) => setAmount(e.target.value)}
-							required
-						/>
-					</div>
-				</div>
-
-				<button
-					type="submit"
-					disabled={loading || !network}
-					className="w-full py-4 bg-[#E4570A] text-white rounded-full font-black text-[10px] uppercase tracking-[0.2em] shadow-xl shadow-[#E4570A]/20 disabled:opacity-50 flex items-center justify-center space-x-2 transition-transform active:scale-95"
-				>
-					{loading ? "Processing..." : <><span>Authorize {step}</span> <CheckCircle2 size={14} /></>}
-				</button>
-			</form>
-		</Modal>
-	);
+                            <button
+                                onClick={() => setStep("pin")}
+                                disabled={!formData.provider || (!formData.meterNumber && !formData.smartcardNumber) || !formData.amount}
+                                className="w-full py-5 bg-[#E4570A] text-white rounded-3xl font-black text-xs uppercase tracking-[0.2em] shadow-xl shadow-[#E4570A]/30 hover:translate-y-[-2px] active:scale-95 transition-all disabled:opacity-50 disabled:translate-y-0"
+                            >
+                                Continue Payment
+                            </button>
+                        </div>
+                    )}
+                </div>
+            </div>
+        </div>
+    );
 };
 
 export default BillsModal;

@@ -31,10 +31,16 @@ export const AuthProvider = ({ children }) => {
 		localStorage.removeItem("token");
 	};
 
-	const login = async (email, password) => {
+	const login = async (identifier, secret) => {
 		setLoading(true);
 		try {
-			const { data } = await authApi.login({ email, password });
+            const isBiometric = identifier === "biometric";
+            const payload = isBiometric 
+                ? { credentialId: secret, isBiometric: true }
+                : { email: identifier, password: secret };
+
+            const endpoint = isBiometric ? "/auth/login-biometrics" : "/auth/login";
+			const { data } = await authApi.login(payload, isBiometric);
 			_saveSession(data.user, data.token);
 			return data;
 		} finally {

@@ -1,23 +1,39 @@
 const BillService = require('../services/billService');
 
-const buyAirtime = async (req, res) => {
+const payAirtime = async (req, res) => {
     try {
-        const { phone, amount, carrier, pin } = req.body;
-        const result = await BillService.purchaseAirtime(req.user._id, { phone, amount, carrier, pin });
-        res.status(200).json({ message: 'Airtime purchase successful', ...result });
+        const result = await BillService.purchaseAirtime(req.user._id, req.body);
+        res.json(result);
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
 };
 
-const buyData = async (req, res) => {
+const payData = async (req, res) => {
     try {
-        const { phone, plan, amount, pin } = req.body;
-        const result = await BillService.purchaseData(req.user._id, { phone, plan, amount, pin });
-        res.status(200).json({ message: 'Data purchase successful', ...result });
+        const result = await BillService.purchaseData(req.user._id, req.body);
+        res.json(result);
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
 };
 
-module.exports = { buyAirtime, buyData };
+const payElectricity = async (req, res) => {
+    try {
+        const result = await BillService.payElectricity(req.user._id, req.body);
+        res.json(result);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+};
+
+const payCableTV = async (req, res) => {
+    try {
+        const result = await BillService.payCableTV(req.user._id, req.body);
+        res.json(result);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+};
+
+module.exports = { payAirtime, payData, payElectricity, payCableTV };

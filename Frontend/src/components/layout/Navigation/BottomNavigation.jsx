@@ -1,11 +1,11 @@
 import { NavLink } from "react-router-dom";
-import { Home, Wallet, ReceiptText, UserCircle2 } from "lucide-react";
+import { Home, Wallet, CreditCard, UserCircle2 } from "lucide-react";
 
 const BottomNavigation = () => {
     const navItems = [
         { to: "/", label: "Home", icon: Home },
         { to: "/wallet", label: "Wallet", icon: Wallet },
-        { to: "/transactions", label: "History", icon: ReceiptText },
+        { to: "/cards", label: "Cards", icon: CreditCard },
         { to: "/profile", label: "Profile", icon: UserCircle2 },
     ];
 

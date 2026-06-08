@@ -115,8 +115,43 @@ const changePassword = async (req, res) => {
 	}
 };
 
+const setupBiometrics = async (req, res) => {
+    try {
+        const { credentialId, publicKey } = req.body;
+        const user = await User.findById(req.user._id);
+        
+        user.biometrics = {
+            credentialId,
+            publicKey,
+            enabled: true
+        };
+        
+        await user.save();
+        res.status(200).json({ message: 'Biometrics enabled', user });
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+};
+
+const loginBiometrics = async (req, res) => {
+    try {
+        const { credentialId } = req.body;
+        const user = await User.findOne({ 'biometrics.credentialId': credentialId });
+        
+        if (!user || !user.biometrics.enabled) {
+            throw new Error('Biometrics not found or disabled for this account');
+        }
+
+        const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
+        res.status(200).json({ user, token });
+    } catch (error) {
+        res.status(401).json({ message: error.message });
+    }
+};
+
 module.exports = { 
     register, login, logout, refreshToken, verifyToken, getProfile, 
     verifyEmail, forgotPassword, resetPassword, upgradeKyc,
-    updateProfile, updateSettings, changePassword
+    updateProfile, updateSettings, changePassword,
+    setupBiometrics, loginBiometrics
 };

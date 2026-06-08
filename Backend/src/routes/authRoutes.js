@@ -13,6 +13,8 @@ const {
     updateProfile,
     updateSettings,
     changePassword,
+    setupBiometrics,
+    loginBiometrics,
 } = require('../controllers/authController');
 const { authenticate } = require('../middlewares/authMiddleware');
 
@@ -31,5 +33,7 @@ router.post('/upgrade-kyc', authenticate, upgradeKyc);
 router.put('/update-profile', authenticate, updateProfile);
 router.put('/update-settings', authenticate, updateSettings);
 router.put('/change-password', authenticate, changePassword);
+router.post('/setup-biometrics', authenticate, setupBiometrics);
+router.post('/login-biometrics', loginBiometrics);
 
 module.exports = router;

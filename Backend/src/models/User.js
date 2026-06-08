@@ -85,7 +85,13 @@ const userSchema = new mongoose.Schema({
         type: Date,
         default: Date.now,
     },
+    biometrics: {
+        credentialId: String,
+        publicKey: String,
+        enabled: { type: Boolean, default: false }
+    }
 }, {
+    timestamps: true,
     toJSON: { virtuals: true },
     toObject: { virtuals: true }
 });

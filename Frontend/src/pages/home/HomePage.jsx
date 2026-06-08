@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
+import { ChevronRight } from "lucide-react";
 import WelcomeSection from "../../components/features/Dashboard/WelcomeSection";
 import BalanceCard from "../../components/features/Dashboard/BalanceCard";
 import QuickActions from "../../components/features/Dashboard/QuickActions";
@@ -28,9 +30,19 @@ const HomePage = () => {
 				<ReferralCard />
 			</div>
 			
-			<SafelockSection refreshTrigger={refreshTrigger} onRefresh={handleRefresh} />
+			<div className="flex justify-between items-center mb-6">
+				<h3 className="text-slate-900 font-black text-xs uppercase tracking-widest">Recent Activity</h3>
+				<Link to="/transactions" className="text-[#E4570A] font-black text-[10px] uppercase tracking-widest flex items-center space-x-1 hover:translate-x-1 transition-all">
+					<span>See All</span>
+					<ChevronRight size={14} />
+				</Link>
+			</div>
 			
-			<TransactionHistory limit={6} refreshTrigger={refreshTrigger} />
+			<div className="bg-white rounded-[2.5rem] border border-slate-100 shadow-sm overflow-hidden mb-8">
+				<TransactionHistory limit={5} />
+			</div>
+			
+			<SafelockSection refreshTrigger={refreshTrigger} onRefresh={handleRefresh} />
 			<SpendingAnalytics refreshTrigger={refreshTrigger} />
 		</div>
 	);

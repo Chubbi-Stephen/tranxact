@@ -1,11 +1,13 @@
 const express = require('express');
-const { createCard, getCards, fundCard } = require('../controllers/cardController');
-const { authenticate } = require('../middlewares/authMiddleware');
-
 const router = express.Router();
+const cardController = require('../controllers/cardController');
+const { authenticate } = require('../middlewares/authMiddleware');
+const idempotency = require('../middlewares/idempotencyMiddleware');
 
-router.get('/', authenticate, getCards);
-router.post('/create', authenticate, createCard);
-router.post('/fund', authenticate, fundCard);
+router.use(authenticate);
+
+router.get('/', cardController.getCards);
+router.post('/', idempotency, cardController.createCard);
+router.post('/fund', idempotency, cardController.fundCard);
 
 module.exports = router;

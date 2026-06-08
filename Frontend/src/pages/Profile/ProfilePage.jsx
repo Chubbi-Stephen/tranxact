@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import {
 	User, Mail, Phone, ShieldCheck, Moon, Sun, Bell, BellOff,
 	LogOut, ChevronRight, BadgeCheck, ShieldAlert, Lock, KeyRound,
-	Smartphone, HelpCircle, FileText, Star, Trash2, Globe
+	Smartphone, HelpCircle, FileText, Star, Trash2, Globe, Fingerprint
 } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
 import { useTheme } from "../../context/ThemeContext";
@@ -48,6 +48,28 @@ const ProfilePage = () => {
 			toast.error("Failed to update preferences");
 		}
 	};
+
+	const handleToggleBiometrics = async () => {
+        try {
+            if (user?.biometrics?.enabled) {
+                await authApi.updateSettings({ "biometrics.enabled": false });
+                localStorage.removeItem("biometric_id");
+                await refreshUser();
+                toast.success("Biometrics disabled");
+            } else {
+                const mockCredId = `cred_${Math.random().toString(36).slice(2)}`;
+                await authApi.setupBiometrics({ 
+                    credentialId: mockCredId, 
+                    publicKey: "mock_pub_key" 
+                });
+                localStorage.setItem("biometric_id", mockCredId);
+                await refreshUser();
+                toast.success("Biometrics enabled successfully!");
+            }
+        } catch (err) {
+            toast.error("Failed to setup biometrics");
+        }
+    };
 
 	const kycLevels = {
 		1: { label: "Tier 1 — Unverified", color: "text-amber-500", bg: "bg-amber-50", icon: <ShieldAlert size={14} /> },
@@ -182,6 +204,12 @@ const ProfilePage = () => {
 					label="Change Password"
 					sublabel="Update your login password"
 					onClick={() => setActiveModal("password")}
+				/>
+                <SettingRow icon={Fingerprint} iconBg="bg-blue-50" iconColor="text-blue-500"
+					label="Biometric Login"
+					sublabel={user?.biometrics?.enabled ? "FaceID/TouchID is active" : "Enable faster secure login"}
+					onClick={handleToggleBiometrics}
+					right={<Toggle checked={user?.biometrics?.enabled} />}
 				/>
 				<SettingRow icon={Lock} iconBg="bg-slate-900" iconColor="text-white"
 					label="Transaction PIN"

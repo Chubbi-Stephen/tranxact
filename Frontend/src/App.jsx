@@ -4,6 +4,7 @@ import HomePage from "./pages/home/HomePage";
 import WalletPage from "./pages/Wallet/WalletPage";
 import TransactionsPage from "./pages/Transactions/TransactionsPage";
 import ProfilePage from "./pages/Profile/ProfilePage";
+import VirtualCardsPage from "./pages/Cards/VirtualCardsPage";
 import LoginPage from "./pages/Login/LoginPage";
 import RegisterPage from "./pages/Register/RegisterPage";
 import VerifyEmailPage from "./pages/VerifyEmailPage";
@@ -70,6 +71,14 @@ function App() {
 							element={
 								<ProtectedRoute>
 									<ProfilePage />
+								</ProtectedRoute>
+							}
+						/>
+						<Route
+							path="cards"
+							element={
+								<ProtectedRoute>
+									<VirtualCardsPage />
 								</ProtectedRoute>
 							}
 						/>

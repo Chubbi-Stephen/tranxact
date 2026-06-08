@@ -38,7 +38,7 @@ api.interceptors.response.use(
 // ── Auth endpoints ─────────────────────────────────────────────────────────────
 export const authApi = {
 	register: (data) => api.post("/auth/register", data),
-	login: (data) => api.post("/auth/login", data),
+	login: (data, isBiometric = false) => api.post(isBiometric ? "/auth/login-biometrics" : "/auth/login", data),
 	logout: () => api.post("/auth/logout"),
 	verifyToken: () => api.get("/auth/verify"),
 	getProfile: () => api.get("/auth/profile"),

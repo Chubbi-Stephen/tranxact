@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { User, Lock, ArrowRight, Eye, EyeOff } from "lucide-react";
+import { User, Lock, ArrowRight, Eye, EyeOff, Fingerprint } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
 import ForgotPasswordModal from "../../components/features/Modals/ForgotPasswordModal";
 
@@ -22,6 +22,21 @@ const LoginPage = () => {
 		} catch (err) {
 			const message = err.response?.data?.message || "Invalid credentials";
 			setError(message);
+		}
+	};
+
+	const handleBiometricLogin = async () => {
+		try {
+			const credentialId = localStorage.getItem("biometric_id");
+			if (!credentialId) {
+				return setError("Biometrics not set up on this device");
+			}
+
+			// Simulated verification
+			await login("biometric", credentialId);
+			navigate("/");
+		} catch (err) {
+			setError("Biometric authentication failed");
 		}
 	};
 
@@ -101,6 +116,21 @@ const LoginPage = () => {
 					>
 						<span>{loading ? "Authenticating..." : "Sign In"}</span>
 						<ArrowRight size={16} />
+					</button>
+
+					<div className="relative py-4 flex items-center">
+						<div className="flex-grow border-t border-slate-100"></div>
+						<span className="flex-shrink mx-4 text-[10px] font-black text-slate-300 uppercase tracking-widest">Or</span>
+						<div className="flex-grow border-t border-slate-100"></div>
+					</div>
+
+					<button
+						type="button"
+						onClick={handleBiometricLogin}
+						className="w-full py-5 bg-white border border-slate-200 text-slate-800 rounded-full font-black text-[11px] uppercase tracking-[0.2em] shadow-sm hover:bg-slate-50 transition-all flex items-center justify-center space-x-3 active:scale-95"
+					>
+						<Fingerprint size={18} className="text-[#E4570A]" />
+						<span>Sign In with FaceID</span>
 					</button>
 				</form>
 

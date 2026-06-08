@@ -6,6 +6,7 @@ const transactionRoutes = require('./routes/transactionRoutes');
 const aiRoutes = require('./routes/aiRoutes');
 const savingsRoutes = require('./routes/savingsRoutes');
 const pinRoutes = require('./routes/pinRoutes');
+const billRoutes = require('./routes/billRoutes');
 const errorHandler = require('./middlewares/errorHandler');
 
 dotenv.config();
@@ -47,6 +48,7 @@ app.use('/api/transactions', transactionRoutes);
 app.use('/api/ai', aiRoutes);
 app.use('/api/savings', savingsRoutes);
 app.use('/api/pin', pinRoutes);
+app.use('/api/bills', billRoutes);
 
 // ── Global error handler ──────────────────────────────────────────────────────
 app.use(errorHandler);

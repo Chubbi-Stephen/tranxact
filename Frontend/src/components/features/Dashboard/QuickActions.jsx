@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { CreditCard, Landmark, UserCircle2, PlusCircle, LayoutGrid } from "lucide-react";
+import { CreditCard, Landmark, UserCircle2, Smartphone, LayoutGrid } from "lucide-react";
 import SendMoneyModal from "../Modals/SendMoneyModal";
 import BankTransferModal from "../Modals/BankTransferModal";
 import ReceiveMoneyModal from "../Modals/RecieveMoneyModal";
 import FundWalletModal from "../Modals/FundWalletModal";
 import BillsModal from "../Modals/BillsModal";
+import AirtimeModal from "../Modals/AirtimeModal";
 
 const QuickActions = ({ onRefresh }) => {
 	const [activeModal, setActiveModal] = useState(null);
@@ -30,7 +31,7 @@ const QuickActions = ({ onRefresh }) => {
 				<div className="flex justify-between items-start gap-2 relative z-10">
 					<ActionButton icon={Landmark} label="Bank" onClick={() => setActiveModal("bank")} />
 					<ActionButton icon={UserCircle2} label="P2P" onClick={() => setActiveModal("send")} />
-					<ActionButton icon={PlusCircle} label="Fund" onClick={() => setActiveModal("add")} />
+					<ActionButton icon={Smartphone} label="Airtime" onClick={() => setActiveModal("airtime")} />
 					<ActionButton icon={CreditCard} label="Bills" onClick={() => setActiveModal("pay")} />
 				</div>
 
@@ -39,6 +40,7 @@ const QuickActions = ({ onRefresh }) => {
 
 			{activeModal === "bank" && <BankTransferModal onClose={() => setActiveModal(null)} onRefresh={onRefresh} />}
 			{activeModal === "send" && <SendMoneyModal onClose={() => setActiveModal(null)} onRefresh={onRefresh} />}
+			{activeModal === "airtime" && <AirtimeModal onClose={() => setActiveModal(null)} onRefresh={onRefresh} />}
 			{activeModal === "add" && <FundWalletModal onClose={() => setActiveModal(null)} onRefresh={onRefresh} />}
 			{activeModal === "pay" && <BillsModal onClose={() => setActiveModal(null)} onRefresh={onRefresh} />}
 			{activeModal === "receive" && <ReceiveMoneyModal onClose={() => setActiveModal(null)} />}

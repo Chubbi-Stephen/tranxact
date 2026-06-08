@@ -81,4 +81,10 @@ export const pinApi = {
 	verify: (pin) => api.post("/pin/verify", { pin }),
 };
 
+// ── Bill endpoints ─────────────────────────────────────────────────────────────
+export const billsApi = {
+	buyAirtime: (data) => api.post("/bills/airtime", data),
+	buyData: (data) => api.post("/bills/data", data),
+};
+
 export default api;

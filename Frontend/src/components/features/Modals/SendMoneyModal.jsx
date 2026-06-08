@@ -61,7 +61,7 @@ const SendMoneyModal = ({ onClose, onRefresh }) => {
 			<PinModal 
 				title={`Authorize ₦${parseFloat(amount).toLocaleString()}`}
 				onClose={() => setStep("form")}
-				onComplete={handlePinComplete}
+				onSuccess={handlePinComplete}
 				loading={loading}
 			/>
 		);

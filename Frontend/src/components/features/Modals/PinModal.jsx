@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Lock, X, Delete } from "lucide-react";
 
-const PinModal = ({ title, onClose, onComplete, loading }) => {
+const PinModal = ({ title, onClose, onSuccess, loading }) => {
 	const [pin, setPin] = useState("");
 	
 	const handleNumberClick = (num) => {
@@ -16,9 +16,9 @@ const PinModal = ({ title, onClose, onComplete, loading }) => {
 
 	useEffect(() => {
 		if (pin.length === 4) {
-			onComplete(pin);
+			onSuccess(pin);
 		}
-	}, [pin, onComplete]);
+	}, [pin, onSuccess]);
 
 	return (
 		<div className="fixed inset-0 z-[110] bg-slate-900/60 backdrop-blur-md flex items-center justify-center p-4">

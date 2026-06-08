@@ -65,7 +65,7 @@ const BillsModal = ({ onClose, onRefresh }) => {
 			<PinModal 
 				title={`Authorize ₦${parseFloat(amount).toLocaleString()}`}
 				onClose={() => setStep(amount ? (phone ? 'airtime' : 'menu') : 'menu')}
-				onComplete={handlePinComplete}
+				onSuccess={handlePinComplete}
 				loading={loading}
 			/>
 		);

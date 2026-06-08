@@ -84,10 +84,18 @@ userSchema.virtual('hasPin').get(function() {
     return !!this.transactionPin;
 });
 
+// Password/PIN verification
+userSchema.methods.verifyPin = async function(pin) {
+    if (!this.transactionPin) return false;
+    const bcrypt = require('bcryptjs');
+    return await bcrypt.compare(pin, this.transactionPin);
+};
+
 // Never return the password hash in API responses
 userSchema.methods.toJSON = function () {
     const obj = this.toObject();
     delete obj.password;
+    delete obj.transactionPin;
     return obj;
 };
 

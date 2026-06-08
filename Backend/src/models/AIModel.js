@@ -1,25 +1,23 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 const AIModelSchema = new mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        required: true
+        required: true,
     },
     financialData: {
         type: Object,
-        required: true
+        required: true,
     },
     recommendations: {
         type: Array,
-        default: []
+        default: [],
     },
     createdAt: {
         type: Date,
-        default: Date.now
-    }
+        default: Date.now,
+    },
 });
 
-const AIModel = mongoose.model('AIModel', AIModelSchema);
-
-export default AIModel;
+module.exports = mongoose.model('AIModel', AIModelSchema);

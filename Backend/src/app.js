@@ -1,28 +1,38 @@
 const express = require('express');
-const mongoose = require('mongoose'); // or use pg for PostgreSQL
+const cors = require('cors');
 const dotenv = require('dotenv');
 const authRoutes = require('./routes/authRoutes');
 const transactionRoutes = require('./routes/transactionRoutes');
 const aiRoutes = require('./routes/aiRoutes');
-const { errorHandler } = require('./middlewares/errorHandler');
-const { connectDB } = require('./config/db');
+const errorHandler = require('./middlewares/errorHandler');
 
 dotenv.config();
+
 const app = express();
 
-// Middleware
+// ── CORS ──────────────────────────────────────────────────────────────────────
+app.use(
+    cors({
+        origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+        credentials: true,
+    })
+);
+
+// ── Body parsing ──────────────────────────────────────────────────────────────
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Database connection
-connectDB();
+// ── Health check ──────────────────────────────────────────────────────────────
+app.get('/api/health', (req, res) => {
+    res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
+});
 
-// Routes
+// ── Routes ────────────────────────────────────────────────────────────────────
 app.use('/api/auth', authRoutes);
 app.use('/api/transactions', transactionRoutes);
 app.use('/api/ai', aiRoutes);
 
-// Error handling middleware
+// ── Global error handler ──────────────────────────────────────────────────────
 app.use(errorHandler);
 
 module.exports = app;

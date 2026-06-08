@@ -1,45 +1,55 @@
 const AuthService = require('../services/authService');
 
-class AuthController {
-    constructor() {
-        this.authService = AuthService;
+const register = async (req, res) => {
+    try {
+        const { user, token } = await AuthService.register(req.body);
+        res.status(201).json({ user, token });
+    } catch (error) {
+        res.status(400).json({ message: error.message });
     }
+};
 
-    async register(req, res) {
-        try {
-            const user = await this.authService.register(req.body);
-            res.status(201).json({ user });
-        } catch (error) {
-            res.status(400).json({ message: error.message });
-        }
+const login = async (req, res) => {
+    try {
+        const { token, user } = await AuthService.login(req.body);
+        res.status(200).json({ token, user });
+    } catch (error) {
+        const status = error.message === 'User not found' ? 404 : 401;
+        res.status(status).json({ message: error.message });
     }
+};
 
-    async login(req, res) {
-        try {
-            const { token, user } = await this.authService.login(req.body);
-            res.status(200).json({ token, user });
-        } catch (error) {
-            res.status(401).json({ message: error.message });
-        }
+const logout = async (req, res) => {
+    try {
+        const result = await AuthService.logout(req.user._id);
+        res.status(200).json(result);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
+};
 
-    async logout(req, res) {
-        try {
-            await this.authService.logout(req.user.id);
-            res.status(200).json({ message: 'Logged out successfully' });
-        } catch (error) {
-            res.status(500).json({ message: error.message });
-        }
+const refreshToken = async (req, res) => {
+    try {
+        const { token } = await AuthService.refreshToken(req.body);
+        res.status(200).json({ token });
+    } catch (error) {
+        res.status(401).json({ message: error.message });
     }
+};
 
-    async refreshToken(req, res) {
-        try {
-            const { token } = await this.authService.refreshToken(req.body);
-            res.status(200).json({ token });
-        } catch (error) {
-            res.status(401).json({ message: error.message });
-        }
+const verifyToken = async (req, res) => {
+    // authMiddleware already verified + attached req.user
+    res.status(200).json({ user: req.user });
+};
+
+const getProfile = async (req, res) => {
+    try {
+        const user = await AuthService.getUserById(req.user._id);
+        if (!user) return res.status(404).json({ message: 'User not found' });
+        res.status(200).json({ user });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
-}
+};
 
-module.exports = new AuthController();
+module.exports = { register, login, logout, refreshToken, verifyToken, getProfile };

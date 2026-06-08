@@ -1,24 +1,28 @@
-const express = require('express');
-const mongoose = require('mongoose');
+const http = require('http');
 const dotenv = require('dotenv');
-const app = require('./src/app');
-const { errorHandler } = require('./src/middlewares/errorHandler');
-
 dotenv.config();
+
+const app = require('./src/app');
+const { connectDB } = require('./src/config/db');
+const { initRealTime } = require('./src/utils/realTime');
 
 const PORT = process.env.PORT || 5000;
 
-// Connect to the database
-mongoose.connect(process.env.DB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+// Create HTTP server so Socket.io can share it with Express
+const server = http.createServer(app);
+
+// Initialise Socket.io real-time layer
+initRealTime(server);
+
+// Connect to MongoDB then start listening
+connectDB()
     .then(() => {
-        console.log('Database connected successfully');
-        app.listen(PORT, () => {
-            console.log(`Server is running on port ${PORT}`);
+        server.listen(PORT, () => {
+            console.log(`✅ Server running on http://localhost:${PORT}`);
+            console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
         });
     })
-    .catch(err => {
-        console.error('Database connection error:', err);
+    .catch((err) => {
+        console.error('❌ Failed to start server:', err.message);
+        process.exit(1);
     });
-
-// Error handling middleware
-app.use(errorHandler);

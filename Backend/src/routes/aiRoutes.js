@@ -1,11 +1,17 @@
-import express from 'express';
-import { AIController } from '../controllers/aiController';
+const express = require('express');
+const {
+    analyzeSpending,
+    getBudgetRecommendations,
+    predictExpenses,
+} = require('../controllers/aiController');
+const { authenticate } = require('../middlewares/authMiddleware');
 
 const router = express.Router();
-const aiController = new AIController();
 
-// Define AI-related routes
-router.post('/predict', aiController.predict);
-router.get('/insights', aiController.getInsights);
+router.use(authenticate);
 
-export default router;
+router.get('/analyze', analyzeSpending);
+router.get('/recommendations', getBudgetRecommendations);
+router.get('/predict', predictExpenses);
+
+module.exports = router;

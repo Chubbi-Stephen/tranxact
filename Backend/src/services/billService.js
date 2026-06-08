@@ -26,7 +26,7 @@ class BillService {
             await user.save();
 
             const transaction = await Transaction.create({
-                userId,
+                user: userId,
                 type: 'debit',
                 amount,
                 category: 'Bills',
@@ -42,10 +42,12 @@ class BillService {
     }
 
     async purchaseData(userId, { phone, plan, amount, pin }) {
+        console.log('PurchaseData payload:', { phone, plan, amount, pin: '****' });
         const user = await User.findById(userId).select('+transactionPin');
         if (!user) throw new Error('User not found');
 
         const isPinValid = await user.verifyPin(pin);
+        console.log('PIN valid?', isPinValid);
         if (!isPinValid) throw new Error('Invalid Transaction PIN');
 
         if (user.balance < amount) throw new Error('Insufficient balance');
@@ -54,7 +56,7 @@ class BillService {
         await user.save();
 
         const transaction = await Transaction.create({
-            userId,
+            user: userId,
             type: 'debit',
             amount,
             category: 'Data',

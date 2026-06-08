@@ -13,6 +13,7 @@ const CATEGORIES = [
     'Entertainment',
     'Savings',
     'Bills',
+    'Data',
     'Other',
 ];
 

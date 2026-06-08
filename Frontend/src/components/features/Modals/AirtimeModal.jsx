@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Phone, ArrowRight, CheckCircle2, ChevronRight, Zap, Database, Smartphone } from "lucide-react";
 import Modal from "./Modal";
 import PinModal from "./PinModal";
+import SetPinModal from "./SetPinModal";
 import { billsApi } from "../../../services/api";
 import { useAuth } from "../../../hooks/useAuth";
 import toast from "react-hot-toast";
@@ -25,7 +26,7 @@ const DATA_PLANS = [
 const QUICK_AMOUNTS = [100, 200, 500, 1000, 2000, 5000];
 
 const AirtimeModal = ({ onClose, onRefresh }) => {
-	const { user } = useAuth();
+	const { user, refreshUser } = useAuth();
 	const [type, setType] = useState("airtime"); // airtime or data
 	const [step, setStep] = useState(1); // 1: Form, 2: PIN, 3: Success
 	const [loading, setLoading] = useState(false);
@@ -55,7 +56,11 @@ const AirtimeModal = ({ onClose, onRefresh }) => {
 		if (!finalAmount || finalAmount <= 0) return toast.error("Please select an amount");
 		if (finalAmount > user?.balance) return toast.error("Insufficient balance");
 		
-		setStep(2);
+		if (!user?.isPinSet) {
+			setStep(4); // 4: Set PIN
+		} else {
+			setStep(2);
+		}
 	};
 
 	const handlePinSuccess = async (pin) => {
@@ -83,6 +88,7 @@ const AirtimeModal = ({ onClose, onRefresh }) => {
 				});
 			}
 			
+			await refreshUser();
 			setStep(3);
 			if (onRefresh) onRefresh();
 		} catch (err) {
@@ -112,6 +118,15 @@ const AirtimeModal = ({ onClose, onRefresh }) => {
 					</button>
 				</div>
 			</Modal>
+		);
+	}
+
+	if (step === 4) {
+		return (
+			<SetPinModal 
+				onClose={() => setStep(1)} 
+				onSuccess={() => setStep(2)}
+			/>
 		);
 	}
 
